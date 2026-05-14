@@ -1,0 +1,38 @@
+.sectionMb32 {
+  margin-bottom: 32px;
+}
+
+.goldLink {
+  color: var(--gold);
+}
+
+.socialWrap {
+  margin-top: 48px;
+}
+
+.textarea {
+  min-height: 140px;
+}
+
+.submitBtn {
+  width: 100%;
+}
+
+.submitNote {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 12px;
+  text-align: center;
+}
+
+.formSuccessVisible {
+  display: block;
+}
+
+.urgentLink {
+  color: var(--gold);
+}
+
+.fieldError {
+  border-color: var(--amber);
+}

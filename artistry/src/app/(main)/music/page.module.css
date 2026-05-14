@@ -1,0 +1,16 @@
+.dividerSpaced {
+  margin-bottom: 72px;
+}
+
+.platformsWrap {
+  margin-top: 72px;
+}
+
+.platformsTitle {
+  font-size: clamp(24px, 3vw, 36px);
+}
+
+.exclusivePlatform {
+  color: var(--gold);
+  border-color: rgba(212, 160, 60, 0.25);
+}

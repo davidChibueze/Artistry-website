@@ -1,0 +1,60 @@
+.filterBarWrap {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+}
+
+.newsletterRow {
+  display: flex;
+  gap: 0;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.newsletterInput {
+  flex: 1;
+  padding: 12px 16px;
+  background: rgba(240, 232, 220, 0.06);
+  border: 1px solid rgba(240, 232, 220, 0.15);
+  border-right: none;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  border-radius: 2px 0 0 2px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.newsletterInput::placeholder {
+  color: var(--text-muted);
+}
+
+.newsletterBtn {
+  background: var(--gold);
+  color: var(--bg);
+  padding: 12px 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 0 2px 2px 0;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+
+.newsletterBtn:hover {
+  background: var(--amber);
+}
+
+.successMsg {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--teal);
+}
+
+.loadMoreWrap {
+  text-align: center;
+  margin-top: 48px;
+}

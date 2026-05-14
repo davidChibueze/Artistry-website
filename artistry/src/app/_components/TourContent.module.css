@@ -1,0 +1,40 @@
+.tabsBar {
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+}
+
+.notifyMsg {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--teal);
+}
+
+.bookingBlock {
+  margin-top: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding: 40px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+}
+
+.bookingTitle {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.bookingDesc {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  max-width: 480px;
+}
+
+.bookingTitleEm {
+  font-style: italic;
+  color: var(--gold);
+}

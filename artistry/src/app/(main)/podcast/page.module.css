@@ -1,0 +1,37 @@
+.episodesHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.badgeMl {
+  margin-left: 8px;
+}
+
+.showActions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+
+.pitchBox {
+  margin-top: 24px;
+  padding: 24px;
+  background: rgba(240, 232, 220, 0.03);
+  border: 1px solid var(--border);
+}
+
+.pitchLabel {
+  margin-bottom: 10px;
+}
+
+.pitchDesc {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}

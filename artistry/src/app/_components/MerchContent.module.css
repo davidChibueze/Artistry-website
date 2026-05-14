@@ -1,0 +1,19 @@
+.catsBarWrap {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+}
+
+.bundleDesc {
+  font-size: 15px;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.sectionTitleSpaced {
+  margin-bottom: 40px;
+}
+
+.shippingIcon {
+  color: var(--gold);
+  margin-bottom: 10px;
+}

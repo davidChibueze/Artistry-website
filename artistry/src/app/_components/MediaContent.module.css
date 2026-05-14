@@ -1,0 +1,72 @@
+.tabsBarWrap {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+}
+
+.photoHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.photoAttribution {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 20px;
+}
+
+.photoAttributionLink {
+  color: var(--gold);
+}
+
+.pressEnquiryBlock {
+  margin-top: 40px;
+  padding: 28px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.pressEnquiryLabel {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.pressEnquiryDesc {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.pressEnquiryEmail {
+  color: var(--gold);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.bioHeading {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.bioHeadingEm {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.sectionMb40 {
+  margin-bottom: 40px;
+}
+
+.sectionMb32 {
+  margin-bottom: 32px;
+}

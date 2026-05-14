@@ -1,0 +1,5 @@
+.heroInner {
+  max-width: var(--max-w);
+  position: relative;
+  z-index: 1;
+}

@@ -1,0 +1,61 @@
+.pageSub {
+  margin-top: 20px;
+}
+
+.warmLabel {
+  color: #8a7a65;
+}
+
+.warmTitle {
+  color: #1a1209;
+  margin-bottom: 32px;
+}
+
+.amberEm {
+  color: var(--amber);
+}
+
+.bg2Section {
+  background: var(--bg2);
+}
+
+.valueIcon {
+  width: 28px;
+  height: 28px;
+  color: var(--amber);
+  stroke-width: 1.5;
+}
+
+.epkSection {
+  padding: 80px 48px;
+  background: var(--bg3);
+  border-top: 1px solid var(--border);
+}
+
+.epkInner {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.centeredLabel {
+  justify-content: center;
+}
+
+.epkTitle {
+  margin-bottom: 16px;
+}
+
+.epkDesc {
+  font-size: 16px;
+  color: var(--text-muted);
+  margin-bottom: 36px;
+  line-height: 1.7;
+}
+
+.epkActions {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}

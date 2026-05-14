@@ -1,0 +1,100 @@
+/* Extend the global .track grid to include action buttons column */
+.tracklist :global(.track) {
+  grid-template-columns: 44px 1fr auto auto auto;
+  cursor: default;
+}
+
+/* Action buttons attached to each track row */
+.trackActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.previewBtn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: 2px;
+  font-family: var(--font-sans);
+  transition: border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.previewBtn:hover {
+  border-color: rgba(240, 232, 220, 0.3);
+  color: var(--text);
+}
+
+.previewBtnActive {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+
+.getBtn {
+  padding: 6px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: none;
+  background: var(--gold);
+  color: var(--bg);
+  cursor: pointer;
+  border-radius: 2px;
+  font-family: var(--font-sans);
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.getBtn:hover {
+  background: var(--amber);
+}
+
+/* Full EP download block below tracklist */
+.epActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 32px;
+  padding: 20px 0;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.epActionsLabel {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-right: auto;
+}
+
+/* Mobile: collapse action buttons to icons only */
+@media (max-width: 620px) {
+  .tracklist :global(.track) {
+    grid-template-columns: 40px 1fr auto;
+  }
+
+  /* t-badge and t-dur hide on very small screens — handled by outer grid collapse */
+  .trackActions {
+    gap: 6px;
+  }
+
+  .previewBtnLabel,
+  .getBtnLabel {
+    display: none;
+  }
+
+  .previewBtn,
+  .getBtn {
+    padding: 6px 8px;
+  }
+}

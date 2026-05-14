@@ -1,0 +1,35 @@
+.perkIcon {
+  color: var(--gold);
+}
+
+.emailError {
+  border-color: var(--amber);
+}
+
+.subSuccessVisible {
+  display: block;
+}
+
+.successMusicIcon {
+  width: 28px;
+  height: 28px;
+  color: var(--teal);
+  stroke-width: 1.5;
+}
+
+.successActions {
+  margin-top: 28px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.artRuleSpaced {
+  margin-top: 8px;
+}
+
+.countdownDone {
+  font-size: 24px;
+  color: var(--teal);
+}
