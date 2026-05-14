@@ -1,5 +1,7 @@
 import type { Endpoint } from 'payload'
+import * as Sentry from '@sentry/nextjs'
 import { verifyTransaction, fromLowestUnit } from '../../utilities/credo'
+import { logger } from '../../lib/logger'
 
 export const credoWebhook: Endpoint = {
   path: '/credo/webhook',
@@ -54,7 +56,8 @@ export const credoWebhook: Endpoint = {
 
       return Response.json({ message: 'Order updated' }, { status: 200 })
     } catch (error) {
-      console.error('Credo webhook error:', error)
+      logger.error({ err: error }, 'Credo webhook error')
+      Sentry.captureException(error, { tags: { endpoint: 'credo-webhook' } })
       return Response.json({ error: 'Webhook processing failed' }, { status: 500 })
     }
   },

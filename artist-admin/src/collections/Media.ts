@@ -33,7 +33,6 @@ export const Media: CollectionConfig = {
     },
   ],
   upload: {
-    staticDir: 'media',
     adminThumbnail: 'thumbnail',
     focalPoint: true,
     mimeTypes: [

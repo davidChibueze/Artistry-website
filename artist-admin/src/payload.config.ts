@@ -1,9 +1,11 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { s3Storage } from '@payloadcms/storage-s3'
 import sharp from 'sharp'
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import type { Config } from 'payload'
 
 import { ArtistProfile } from './collections/ArtistProfile'
 import { BlogPosts } from './collections/BlogPosts'
@@ -23,9 +25,23 @@ import { SiteSettings } from './globals/SiteSettings'
 import { credoCallback } from './endpoints/credo/callback'
 import { credoWebhook } from './endpoints/credo/webhook'
 import { emailBroadcast } from './endpoints/email/broadcast'
+import { logger } from './lib/logger'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+const loggingPlugin = (config: Config): Config => {
+  const originalOnInit = config.onInit
+
+  config.onInit = async (payload) => {
+    logger.info({ event: 'payload_init' }, 'Payload CMS initialized')
+    if (originalOnInit) {
+      await originalOnInit(payload)
+    }
+  }
+
+  return config
+}
 
 export default buildConfig({
   admin: {
@@ -88,6 +104,26 @@ export default buildConfig({
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   cors: [process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'].filter(Boolean),
+  plugins: [
+    loggingPlugin,
+    s3Storage({
+      bucket: process.env.S3_BUCKET || '',
+      collections: {
+        media: {
+          prefix: 'media',
+        },
+      },
+      config: {
+        endpoint: process.env.S3_ENDPOINT,
+        region: process.env.S3_REGION || 'auto',
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+        },
+        forcePathStyle: true,
+      },
+    }),
+  ],
   jobs: {
     access: {
       run: ({ req }: { req: PayloadRequest }): boolean => {

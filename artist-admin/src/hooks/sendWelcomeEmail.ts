@@ -1,5 +1,7 @@
 import type { CollectionAfterChangeHook } from 'payload'
+import * as Sentry from '@sentry/nextjs'
 import { sendEmail } from '../utilities/email'
+import { logger } from '../lib/logger'
 
 export const sendWelcomeEmail: CollectionAfterChangeHook = async ({ doc, operation, context }) => {
   if (operation === 'create' && !context.skipWelcomeEmail) {
@@ -28,7 +30,8 @@ export const sendWelcomeEmail: CollectionAfterChangeHook = async ({ doc, operati
         text: `Welcome, ${firstName}! You've been subscribed to ${type}. Stay tuned for exclusive updates from Poshbugati. Visit: https://poshbugati.com`,
       })
     } catch (error) {
-      console.error('Failed to send welcome email:', error)
+      logger.error({ err: error, email: (doc as any).email }, 'Failed to send welcome email')
+      Sentry.captureException(error, { tags: { hook: 'send-welcome-email' } })
     }
   }
 

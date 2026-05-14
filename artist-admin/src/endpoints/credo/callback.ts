@@ -1,5 +1,7 @@
 import type { Endpoint } from 'payload'
+import * as Sentry from '@sentry/nextjs'
 import { verifyTransaction, fromLowestUnit } from '../../utilities/credo'
+import { logger } from '../../lib/logger'
 
 export const credoCallback: Endpoint = {
   path: '/credo/callback',
@@ -57,7 +59,8 @@ export const credoCallback: Endpoint = {
         downloadToken: (order as any).downloadToken,
       })
     } catch (error) {
-      console.error('Credo callback error:', error)
+      logger.error({ err: error, transRef }, 'Credo callback error')
+      Sentry.captureException(error, { tags: { endpoint: 'credo-callback' } })
       return Response.json({ error: 'Verification failed' }, { status: 500 })
     }
   },

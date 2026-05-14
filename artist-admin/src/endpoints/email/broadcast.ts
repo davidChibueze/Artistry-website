@@ -1,5 +1,7 @@
 import type { Endpoint, Where } from 'payload'
+import * as Sentry from '@sentry/nextjs'
 import { sendBroadcast } from '../../utilities/email'
+import { logger } from '../../lib/logger'
 
 export const emailBroadcast: Endpoint = {
   path: '/email/broadcast',
@@ -10,13 +12,20 @@ export const emailBroadcast: Endpoint = {
       return Response.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    let subject: string | undefined
+    let html: string | undefined
+    let text: string | undefined
+    let type: string | undefined
+    let batchSize: number | undefined
+    let delayMs: number | undefined
+
     try {
       const body = await req.json?.()
       if (!body) {
         return Response.json({ error: 'Missing body' }, { status: 400 })
       }
 
-      const { subject, html, text, type, batchSize, delayMs } = body
+      ;({ subject, html, text, type, batchSize, delayMs } = body)
 
       if (!subject || !html) {
         return Response.json({ error: 'subject and html are required' }, { status: 400 })
@@ -64,7 +73,8 @@ export const emailBroadcast: Endpoint = {
         ...result,
       })
     } catch (error) {
-      console.error('Broadcast error:', error)
+      logger.error({ err: error, subject, type }, 'Email broadcast error')
+      Sentry.captureException(error, { tags: { endpoint: 'email-broadcast' } })
       return Response.json(
         { error: error instanceof Error ? error.message : 'Broadcast failed' },
         { status: 500 }
