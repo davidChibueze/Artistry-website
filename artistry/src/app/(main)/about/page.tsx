@@ -15,13 +15,13 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AboutPage() {
   const artist = await getArtistProfile().catch(() => null);
 
-  const principles = artist?.principles ?? [
+  const principles: Array<{ icon: string; title: string; description: string }> = artist?.principles ?? [
     { icon: 'authenticity', title: 'Cultural Honesty', description: 'Every note carries its origin with pride. Afrobeat rhythms are not decorative — they are structural.' },
     { icon: 'emotion', title: 'Emotional Truth', description: 'Country music taught the world that a song can break you open in three minutes.' },
     { icon: 'movement', title: 'Genre as Movement', description: 'Afro country is a living idea — defined not by rules, but by the willingness to keep crossing lines.' },
   ];
 
-  const timeline = artist?.timeline ?? [
+  const timeline: Array<{ year: number; title: string; description?: string }> = artist?.timeline ?? [
     { year: 2020, title: 'The First Recordings', description: undefined },
     { year: 2022, title: 'Going Independent', description: undefined },
     { year: 2023, title: 'The Podcast Launches', description: undefined },
@@ -29,7 +29,7 @@ export default async function AboutPage() {
     { year: 2025, title: 'The Switch Drops', description: undefined },
   ];
 
-  const pressQuotes = artist?.pressQuotes ?? [
+  const pressQuotes: Array<{ quote: string; author: string; publication: string }> = artist?.pressQuotes ?? [
     { quote: "Poshbugati is doing something genuinely new. The Switch doesn't sound like a debut — it sounds like an arrival.", author: '', publication: 'Music Week Africa' },
     { quote: 'Where most fusion feels borrowed, this feels earned. New Roots is the kind of track that opens a genre.', author: '', publication: 'The Lagos Beat' },
     { quote: 'Afro country was always coming. Poshbugati just got there first.', author: '', publication: 'Rolling Stone Africa' },
