@@ -8,7 +8,8 @@ export const metadata: Metadata = {
   description: "Between Two Sounds — the podcast that lives at the intersection of Afrobeat and country. Conversations, stories, and the making of a new genre.",
 };
 
-function formatDate(dateStr: string) {
+function formatDate(dateStr?: string | null) {
+  if (!dateStr) return '';
   return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 

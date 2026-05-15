@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default async function MerchPage() {
   const productsRes = await getMerchProducts({ inStock: true }).catch(() => ({ docs: [], totalDocs: 0 }));
   const products = productsRes.docs;
-  const categories = [...new Set(products.map(p => p.category))];
+  const categories: string[] = [...new Set(products.map(p => p.category).filter(Boolean) as string[])];
 
   return (
     <>

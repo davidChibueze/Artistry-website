@@ -11,7 +11,8 @@ interface Props {
   pastShows: TourShow[];
 }
 
-function formatDate(dateStr: string) {
+function formatDate(dateStr?: string | null) {
+  if (!dateStr) return { month: '', day: '', year: '' };
   const d = new Date(dateStr);
   return {
     month: d.toLocaleDateString('en-US', { month: 'short' }).toUpperCase(),
@@ -20,7 +21,7 @@ function formatDate(dateStr: string) {
   };
 }
 
-function typeBadgeClass(type: string) {
+function typeBadgeClass(type?: string | null) {
   if (type === 'Festival') return 'badge-teal';
   if (type === 'Tour') return 'badge-gold';
   return 'badge-amber';

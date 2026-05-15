@@ -26,7 +26,7 @@ function useCountdown(target: Date) {
 function pad(n: number) { return String(n).padStart(2, '0'); }
 
 interface Props {
-  epReleaseDate?: string;
+  epReleaseDate?: string | null;
 }
 
 export default function SubscribePageClient({ epReleaseDate }: Props) {

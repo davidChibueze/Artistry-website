@@ -11,7 +11,8 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-function formatDate(dateStr: string) {
+function formatDate(dateStr?: string | null) {
+  if (!dateStr) return '';
   return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 }
 
@@ -26,7 +27,7 @@ export default async function MusicPage() {
     sub: t.subtitle || `Afro Country`,
     dur: t.duration,
     badge: t.badge || '',
-    previewUrl: t.previewUrl || '',
+    previewUrl: t.previewUrl || getMediaUrl(t.audioFile),
   })) ?? [];
 
   return (

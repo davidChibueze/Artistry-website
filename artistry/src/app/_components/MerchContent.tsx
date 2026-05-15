@@ -24,7 +24,7 @@ function badgeClass(badge?: string) {
   return 'badge-gold';
 }
 
-function formatPrice(price: number, compareAt?: number, currency = 'USD') {
+function formatPrice(price: number, compareAt?: number | null, currency = 'USD') {
   const symbol = currency === 'NGN' ? '₦' : '$';
   const formatted = `${symbol}${price.toFixed(2)}`;
   const was = compareAt ? `${symbol}${compareAt.toFixed(2)}` : '';
@@ -119,7 +119,7 @@ export default function MerchContent({ products, categories }: Props) {
                   <div className="product-body">
                     <div className="product-name">{p.name}</div>
                     <div className="product-variants">
-                      {p.variants?.map(v => v.options.map(o => o.option).join(' / ')).join(' · ')}
+                      {p.variants?.map(v => v.options?.map(o => o.option).join(' / ') ?? '').join(' · ')}
                     </div>
                     <div className="product-footer">
                       <div className="product-price">

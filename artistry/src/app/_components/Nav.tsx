@@ -6,10 +6,10 @@ import { useEffect, useState } from 'react';
 import styles from './Nav.module.css';
 
 interface NavItem {
-  label: string;
-  url: string;
-  external: boolean;
-  cta: boolean;
+  label?: string | null;
+  url?: string | null;
+  external?: boolean | null;
+  cta?: boolean | null;
 }
 
 interface Props {
@@ -39,17 +39,20 @@ export default function Nav({ items }: Props) {
       <nav id="nav" className={scrolled ? 'scrolled' : ''}>
         <Link className="nav-logo" href="/">poshbugati</Link>
         <ul className="nav-links">
-          {items.map(({ label, url, external, cta }) => (
-            <li key={url}>
-              {external ? (
-                <a href={url} target="_blank" rel="noreferrer" className={pathname === url ? 'active' : ''}>{label}</a>
-              ) : cta ? (
-                <Link href={url} className="nav-cta-link">{label}</Link>
-              ) : (
-                <Link href={url} className={pathname === url ? 'active' : ''}>{label}</Link>
-              )}
-            </li>
-          ))}
+          {items.map(({ label, url, external, cta }) => {
+            if (!url) return null;
+            return (
+              <li key={url}>
+                {external ? (
+                  <a href={url} target="_blank" rel="noreferrer" className={pathname === url ? 'active' : ''}>{label}</a>
+                ) : cta ? (
+                  <Link href={url} className="nav-cta-link">{label}</Link>
+                ) : (
+                  <Link href={url} className={pathname === url ? 'active' : ''}>{label}</Link>
+                )}
+              </li>
+            );
+          })}
         </ul>
         <button
           className="nav-hamburger"
@@ -62,13 +65,14 @@ export default function Nav({ items }: Props) {
 
       <div id="mobile-menu" className={menuOpen ? 'open' : ''}>
         <button className="mm-close" onClick={close}>✕</button>
-        {items.map(({ label, url, external }) => (
-          external ? (
+        {items.map(({ label, url, external }) => {
+          if (!url) return null;
+          return external ? (
             <a key={url} href={url} onClick={close}>{label}</a>
           ) : (
             <Link key={url} href={url} onClick={close}>{label}</Link>
-          )
-        ))}
+          );
+        })}
       </div>
     </>
   );

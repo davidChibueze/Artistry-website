@@ -7,24 +7,24 @@ import styles from './DistributionModal.module.css';
 import type { Track } from './MusicPlayer';
 
 interface StreamingLink {
-  platform: string;
-  url: string;
+  platform?: string | null;
+  url?: string | null;
 }
 
 interface DistributionTier {
-  label: string;
-  description: string;
-  price: number;
-  currency: string;
+  label?: string | null;
+  description?: string | null;
+  price?: number | null;
+  currency?: string | null;
 }
 
 interface Props {
   track: Track;
-  releaseTitle: string;
-  releaseType: string;
+  releaseTitle?: string | null;
+  releaseType?: string | null;
   trackCount: number;
-  streamingLinks?: StreamingLink[];
-  distributionTiers?: DistributionTier[];
+  streamingLinks?: StreamingLink[] | null;
+  distributionTiers?: DistributionTier[] | null;
   onClose: () => void;
   onPreview: () => void;
   isPreviewPlaying: boolean;
@@ -70,7 +70,7 @@ export default function DistributionModal({
   };
 
   const handleCheckout = async () => {
-    if (!selectedTier) return;
+    if (!selectedTier || selectedTier.price == null) return;
     const amount = Math.round(selectedTier.price * 100);
     const currency = selectedTier.currency || 'USD';
     const reference = `PB-${Date.now()}`;
@@ -84,7 +84,7 @@ export default function DistributionModal({
         currency,
         reference,
         callbackUrl: `${siteUrl}/payment/success`,
-        narration: `${releaseTitle} ${releaseType} — ${selectedTier.label}`,
+        narration: `${releaseTitle ?? ''} ${releaseType ?? ''} — ${selectedTier.label ?? ''}`.trim(),
       });
       window.location.href = res.data.authorizationUrl;
     } catch {
@@ -100,13 +100,15 @@ export default function DistributionModal({
     return digits.length > 2 ? `${digits.slice(0, 2)} / ${digits.slice(2)}` : digits;
   };
 
-  const platforms = streamingLinks
-    ? streamingLinks.map((link, i) => ({
-        id: link.platform.toLowerCase().replace(/\s+/g, '-'),
-        name: link.platform,
-        color: ['#1DB954', '#FC3C44', '#FF0000', '#FF7700', '#8B5CF6'][i % 5],
-        href: link.url,
-      }))
+  const platforms = streamingLinks && streamingLinks.length
+    ? streamingLinks
+        .filter((l): l is { platform: string; url: string } => !!l.platform && !!l.url)
+        .map((link, i) => ({
+          id: link.platform.toLowerCase().replace(/\s+/g, '-'),
+          name: link.platform,
+          color: ['#1DB954', '#FC3C44', '#FF0000', '#FF7700', '#8B5CF6'][i % 5],
+          href: link.url,
+        }))
     : DEFAULT_PLATFORMS;
 
   return (
@@ -116,7 +118,7 @@ export default function DistributionModal({
 
         <div className={styles.header}>
           <div className={styles.epArtMini}>
-            <div className={styles.epArtText}>{releaseTitle.toUpperCase().split(' ').slice(0, 2).join('<br/>')}</div>
+            <div className={styles.epArtText}>{(releaseTitle ?? '').toUpperCase().split(' ').slice(0, 2).join('<br/>')}</div>
           </div>
           <div className={styles.trackMeta}>
             <div className={styles.trackTitle}>{track.name}</div>
@@ -168,7 +170,7 @@ export default function DistributionModal({
                       <div className={styles.tierDesc}>{tier.description}</div>
                     </div>
                     <div className={styles.tierPrice}>
-                      {tier.currency === 'NGN' ? '₦' : '$'}{tier.price.toFixed(2)}
+                      {tier.currency === 'NGN' ? '₦' : '$'}{(tier.price ?? 0).toFixed(2)}
                     </div>
                   </button>
                 ))}
@@ -192,7 +194,7 @@ export default function DistributionModal({
                       <div className={styles.tierDesc}>{tier.description}</div>
                     </div>
                     <div className={styles.tierPrice}>
-                      {tier.currency === 'NGN' ? '₦' : '$'}{tier.price.toFixed(2)}
+                      {tier.currency === 'NGN' ? '₦' : '$'}{(tier.price ?? 0).toFixed(2)}
                     </div>
                   </button>
                 ))}
@@ -219,7 +221,7 @@ export default function DistributionModal({
                   >
                     {redirecting
                       ? 'Redirecting to checkout…'
-                      : `Proceed to Checkout — ${selectedTier.currency === 'NGN' ? '₦' : '$'}${selectedTier.price.toFixed(2)}`}
+                      : `Proceed to Checkout — ${selectedTier.currency === 'NGN' ? '₦' : '$'}${(selectedTier.price ?? 0).toFixed(2)}`}
                   </button>
                 </div>
               ) : (
@@ -236,7 +238,7 @@ export default function DistributionModal({
           <div className={styles.checkoutPane}>
             <div className={styles.checkoutTitle}>Payment Details</div>
             <div className={styles.checkoutSummary}>
-              {selectedTier?.label} — {selectedTier?.currency === 'NGN' ? '₦' : '$'}{selectedTier?.price.toFixed(2)}
+              {selectedTier?.label} — {selectedTier?.currency === 'NGN' ? '₦' : '$'}{(selectedTier?.price ?? 0).toFixed(2)}
             </div>
 
             <div className={styles.formGroup}>
@@ -288,7 +290,7 @@ export default function DistributionModal({
               onClick={handleCheckout}
               disabled={redirecting}
             >
-              {redirecting ? 'Redirecting…' : `Pay ${selectedTier?.currency === 'NGN' ? '₦' : '$'}${selectedTier?.price.toFixed(2)} via Credo`}
+              {redirecting ? 'Redirecting…' : `Pay ${selectedTier?.currency === 'NGN' ? '₦' : '$'}${(selectedTier?.price ?? 0).toFixed(2)} via Credo`}
             </button>
             <button className={styles.backBtn} onClick={() => setStage('options')}>
               ← Back to options

@@ -1,15 +1,15 @@
 import Link from 'next/link';
 
 interface SocialLinks {
-  instagram?: string;
-  tiktok?: string;
-  youtube?: string;
-  soundcloud?: string;
+  instagram?: string | null;
+  tiktok?: string | null;
+  youtube?: string | null;
+  soundcloud?: string | null;
 }
 
 interface Props {
-  socialLinks?: SocialLinks;
-  footerText?: string;
+  socialLinks?: SocialLinks | null;
+  footerText?: string | null;
 }
 
 export default function Footer({ socialLinks, footerText }: Props) {

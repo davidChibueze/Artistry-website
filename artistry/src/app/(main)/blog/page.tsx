@@ -15,7 +15,7 @@ export default async function BlogPage() {
   ]);
 
   const posts = postsRes.docs;
-  const categories = [...new Set(posts.map(p => p.category))];
+  const categories: string[] = [...new Set(posts.map(p => p.category).filter(Boolean) as string[])];
   const featuredPost = featuredRes.docs[0] ?? null;
 
   return (

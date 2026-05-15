@@ -25,21 +25,21 @@ const inquiryTypeMap: Record<string, string> = {
 };
 
 interface ContactEmails {
-  general?: string;
-  booking?: string;
-  press?: string;
+  general?: string | null;
+  booking?: string | null;
+  press?: string | null;
 }
 
 interface SocialLinks {
-  instagram?: string;
-  tiktok?: string;
-  youtube?: string;
-  soundcloud?: string;
+  instagram?: string | null;
+  tiktok?: string | null;
+  youtube?: string | null;
+  soundcloud?: string | null;
 }
 
 interface Props {
-  contactEmails?: ContactEmails;
-  socialLinks?: SocialLinks;
+  contactEmails?: ContactEmails | null;
+  socialLinks?: SocialLinks | null;
 }
 
 export default function ContactForm({ contactEmails, socialLinks }: Props) {

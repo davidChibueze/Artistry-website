@@ -6,32 +6,32 @@ import DistributionModal from './DistributionModal';
 import styles from './MusicPlayer.module.css';
 
 export interface Track {
-  n: number;
-  name: string;
-  sub: string;
-  dur: string;
-  badge: string;
-  previewUrl: string;
+  n?: number | null;
+  name?: string | null;
+  sub?: string | null;
+  dur?: string | null;
+  badge?: string | null;
+  previewUrl?: string | null;
 }
 
 interface DistributionTier {
-  label: string;
-  description: string;
-  price: number;
-  currency: string;
+  label?: string | null;
+  description?: string | null;
+  price?: number | null;
+  currency?: string | null;
 }
 
 interface StreamingLink {
-  platform: string;
-  url: string;
+  platform?: string | null;
+  url?: string | null;
 }
 
 interface Props {
   tracks: Track[];
-  releaseTitle?: string;
-  releaseType?: string;
-  streamingLinks?: StreamingLink[];
-  distributionTiers?: DistributionTier[];
+  releaseTitle?: string | null;
+  releaseType?: string | null;
+  streamingLinks?: StreamingLink[] | null;
+  distributionTiers?: DistributionTier[] | null;
 }
 
 const PREVIEW_LIMIT = 30;
@@ -43,7 +43,7 @@ export default function MusicPlayer({ tracks, releaseTitle = 'The Switch', relea
   const [modalTrack, setModalTrack] = useState<Track | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const currentTrack = tracks.find(t => t.n === previewingN) ?? null;
+  const currentTrack = tracks.find(t => t.n != null && t.n === previewingN) ?? null;
 
   const stopPreview = useCallback(() => {
     if (audioRef.current) {
@@ -61,17 +61,18 @@ export default function MusicPlayer({ tracks, releaseTitle = 'The Switch', relea
       audioRef.current.pause();
       audioRef.current.src = '';
     }
+    if (!track.previewUrl) return;
     const audio = new Audio(track.previewUrl);
     audio.volume = 0.8;
     audioRef.current = audio;
     audio.play().catch(() => { /* no-op if file unavailable */ });
-    setPreviewingN(track.n);
+    setPreviewingN(track.n ?? null);
     setIsPlaying(true);
     setProgress(0);
   }, []);
 
   const togglePreview = useCallback((track: Track) => {
-    if (previewingN === track.n) {
+    if (track.n != null && previewingN === track.n) {
       if (isPlaying) {
         audioRef.current?.pause();
         setIsPlaying(false);
@@ -137,7 +138,7 @@ export default function MusicPlayer({ tracks, releaseTitle = 'The Switch', relea
       </div>
 
       <div className={styles.epActions}>
-        <span className={styles.epActionsLabel}>Own the complete {releaseType.toLowerCase()}</span>
+        <span className={styles.epActionsLabel}>Own the complete {(releaseType || 'EP').toLowerCase()}</span>
         <button className="btn btn-outline btn-sm" onClick={() => setModalTrack(tracks[0])}>
           Stream Options
         </button>
@@ -168,7 +169,7 @@ export default function MusicPlayer({ tracks, releaseTitle = 'The Switch', relea
           distributionTiers={distributionTiers}
           onClose={() => setModalTrack(null)}
           onPreview={() => togglePreview(modalTrack)}
-          isPreviewPlaying={previewingN === modalTrack.n && isPlaying}
+          isPreviewPlaying={modalTrack.n != null && previewingN === modalTrack.n && isPlaying}
         />
       )}
     </>

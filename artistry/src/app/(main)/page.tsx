@@ -15,12 +15,15 @@ export async function generateMetadata(): Promise<Metadata> {
     title: artist?.name || 'Poshbugati',
     description: settings?.siteDescription || 'Afro country artist. The Switch EP — exclusive on poshbugati.com.',
     openGraph: {
-      images: settings?.ogImage?.url ? [{ url: getMediaUrl(settings.ogImage) }] : undefined,
+      images: settings?.ogImage && typeof settings.ogImage === 'object' && settings.ogImage.url
+        ? [{ url: getMediaUrl(settings.ogImage) }]
+        : undefined,
     },
   };
 }
 
-function formatDate(dateStr: string) {
+function formatDate(dateStr?: string | null) {
+  if (!dateStr) return '';
   return new Date(dateStr).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 }
 

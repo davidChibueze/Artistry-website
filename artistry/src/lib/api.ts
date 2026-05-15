@@ -39,31 +39,31 @@ interface CredoInitializeResponse {
 }
 
 interface CredoCallbackResponse {
-  status: number
+  status: 'success' | 'failed'
   message: string
-  data: {
-    transRef: string
-    businessRef: string
-    debitedAmount: number
-    transAmount: number
-    transFeeAmount: number
-    settlementAmount: number
-    customerId: string
-    transactionDate: string
-    currencyCode: string
-    status: number
-  }
+  orderNumber?: string
+  downloadToken?: string | null
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002/api'
-const API_ORIGIN = API_URL.replace('/api', '')
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api'
+const API_ORIGIN = API_URL.replace(/\/api\/?$/, '')
+
+type MediaSizeKey = 'thumbnail' | 'medium' | 'large'
+
+type MediaLike = {
+  url?: string | null
+  sizes?: Partial<Record<MediaSizeKey, { url?: string | null } | null>> | null
+}
 
 export function getMediaUrl(
-  media: { url?: string | null; sizes?: { medium?: { url?: string | null } } } | number | null | undefined
+  media: MediaLike | number | null | undefined,
+  size?: MediaSizeKey,
 ): string {
   if (!media || typeof media === 'number') return ''
-  const url = media.sizes?.medium?.url || media.url || ''
-  if (!url || url.startsWith('http')) return url
+  const sizeUrl = size ? media.sizes?.[size]?.url : media.sizes?.medium?.url
+  const url = sizeUrl || media.url || ''
+  if (!url) return ''
+  if (url.startsWith('http')) return url
   return `${API_ORIGIN}${url}`
 }
 

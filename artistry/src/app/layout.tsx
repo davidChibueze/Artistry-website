@@ -16,9 +16,10 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: settings?.siteTitle || 'Poshbugati',
       type: 'website',
       locale: 'en_US',
-      images: settings?.ogImage?.url
-        ? [{ url: getMediaUrl(settings.ogImage), alt: settings.ogImage.alt || settings.siteTitle }]
-        : undefined,
+      images:
+        settings?.ogImage && typeof settings.ogImage === 'object' && settings.ogImage.url
+          ? [{ url: getMediaUrl(settings.ogImage), alt: settings.ogImage.alt ?? settings.siteTitle ?? undefined }]
+          : undefined,
     },
     twitter: {
       card: 'summary_large_image',
