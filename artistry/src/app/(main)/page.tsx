@@ -43,7 +43,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <section id="hero" className="home-hero-offset">
+      <section id="hero">
         <div
           className="hero-bg"
           style={{

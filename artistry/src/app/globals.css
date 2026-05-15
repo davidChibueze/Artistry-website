@@ -35,7 +35,6 @@ body {
   color: var(--text);
   overflow-x: hidden;
   min-height: 100vh;
-  padding-top: 40px;
 }
 ::selection { background: var(--gold); color: var(--bg); }
 ::-webkit-scrollbar { width: 4px; }
@@ -44,7 +43,7 @@ body {
 
 /* ─── NAV ─── */
 #nav {
-  position: fixed; top: 40px; left: 0; right: 0; z-index: 100;
+  position: sticky; top: 0; z-index: 100;
   height: var(--nav-h);
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 48px;
@@ -154,13 +153,13 @@ body {
 
 /* ─── PAGE HERO BASE ─── */
 .page-hero {
-  padding: calc(40px + var(--nav-h) + 80px) 48px 80px;
+  padding: 80px 48px 80px;
   max-width: var(--max-w); margin: 0 auto;
 }
 .page-hero-full {
   min-height: 60vh; display: flex; flex-direction: column;
   justify-content: flex-end;
-  padding: calc(40px + var(--nav-h) + 60px) 48px 72px;
+  padding: 60px 48px 72px;
   position: relative; overflow: hidden;
 }
 .page-kicker {
@@ -277,8 +276,7 @@ body {
   font-size: 13px; font-weight: 600; letter-spacing: 0.04em;
   display: flex; align-items: center; justify-content: center; gap: 20px;
   flex-wrap: wrap;
-  position: fixed; top: 0; left: 0; right: 0; z-index: 102;
-  height: 40px;
+  position: relative; z-index: 102;
 }
 .announce-bar a { color: var(--bg); font-weight: 700; text-decoration: underline; }
 
@@ -298,7 +296,6 @@ body {
 }
 
 /* ─── HOME PAGE ─── */
-.home-hero-offset { margin-top: -40px; }
 
 #hero {
   min-height: 100vh; position: relative;
@@ -453,7 +450,7 @@ body {
 /* ─── ABOUT PAGE ─── */
 .about-hero {
   min-height: 70vh; display: grid; grid-template-columns: 1fr 1fr;
-  padding-top: var(--nav-h); overflow: hidden;
+  overflow: hidden;
 }
 .ah-left {
   padding: 72px 56px 72px 48px; display: flex; flex-direction: column; justify-content: center;
@@ -502,7 +499,7 @@ body {
 @media(max-width:900px){
   .about-hero{grid-template-columns:1fr;}
   .ah-right{min-height:280px;}
-  .ah-left{padding: calc(40px + var(--nav-h) + 40px) 24px 48px;}
+  .ah-left{padding: 40px 24px 48px;}
   .bio-section{padding:72px 24px;}
   .bio-grid{grid-template-columns:1fr;gap:48px;}
   .values-grid{grid-template-columns:1fr;}
@@ -512,7 +509,7 @@ body {
 /* ─── MUSIC PAGE ─── */
 .music-hero-bg {
   min-height: 52vh; display: flex; flex-direction: column; justify-content: flex-end;
-  padding: calc(40px + var(--nav-h) + 60px) 48px 64px;
+  padding: 60px 48px 64px;
   background: linear-gradient(160deg, oklch(18% 0.07 58) 0%, oklch(9% 0.03 195) 100%);
   position: relative; overflow: hidden;
 }
@@ -580,7 +577,7 @@ body {
 /* ─── TOUR PAGE ─── */
 .tour-hero {
   min-height: 48vh; display: flex; flex-direction: column; justify-content: flex-end;
-  padding: calc(40px + var(--nav-h) + 60px) 48px 72px;
+  padding: 60px 48px 72px;
   background: linear-gradient(160deg, oklch(14% 0.05 195) 0%, oklch(9% 0.03 60) 100%);
   position: relative; overflow: hidden;
 }
@@ -682,7 +679,7 @@ body {
 
 /* ─── BLOG PAGE ─── */
 .blog-hero {
-  padding: calc(40px + var(--nav-h) + 64px) 48px 72px;
+  padding: 64px 48px 72px;
   background: linear-gradient(160deg, oklch(16% 0.06 60) 0%, oklch(9% 0.02 195) 100%);
   position: relative; overflow: hidden;
 }
@@ -759,7 +756,7 @@ body {
 /* ─── PODCAST PAGE ─── */
 .pod-hero {
   min-height: 56vh; display: grid; grid-template-columns: 1fr 440px;
-  gap: 0; padding-top: var(--nav-h); overflow: hidden;
+  gap: 0; overflow: hidden;
   background: linear-gradient(135deg, oklch(12% 0.04 195) 0%, oklch(9% 0.02 60) 100%);
 }
 .pod-hero-left {
@@ -833,7 +830,7 @@ body {
 @media(max-width:900px){
   .pod-hero{grid-template-columns:1fr;}
   .pod-hero-right{display:none;}
-  .pod-hero-left{padding: calc(40px + var(--nav-h) + 40px) 24px 56px;}
+  .pod-hero-left{padding: 40px 24px 56px;}
   .ep-card{grid-template-columns:60px 1fr;}
   .ep-play{display:none;}
   .show-about{grid-template-columns:1fr;padding:36px 24px;}
@@ -841,7 +838,7 @@ body {
 
 /* ─── MERCH PAGE ─── */
 .merch-hero {
-  padding: calc(40px + var(--nav-h) + 60px) 48px 72px;
+  padding: 60px 48px 72px;
   background: linear-gradient(150deg, oklch(20% 0.08 58) 0%, oklch(10% 0.03 195) 100%);
   position: relative; overflow: hidden;
 }
@@ -948,7 +945,7 @@ body {
 
 /* ─── MEDIA PAGE ─── */
 .media-hero {
-  padding: calc(40px + var(--nav-h) + 64px) 48px 72px;
+  padding: 64px 48px 72px;
   background: linear-gradient(150deg, oklch(11% 0.04 195) 0%, oklch(16% 0.06 60) 100%);
   position: relative; overflow: hidden;
 }
@@ -1045,7 +1042,7 @@ body {
 
 /* ─── CONTACT PAGE ─── */
 .contact-hero {
-  padding: calc(40px + var(--nav-h) + 60px) 48px 72px;
+  padding: 60px 48px 72px;
   background: linear-gradient(160deg, oklch(14% 0.06 60) 0%, oklch(9% 0.03 195) 100%);
   position: relative; overflow: hidden;
 }
