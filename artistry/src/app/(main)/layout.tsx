@@ -22,8 +22,10 @@ export default async function MainLayout({ children }: { children: React.ReactNo
 
   return (
     <>
-      <AnnounceBar />
-      <Nav items={navItems} />
+      <header className="site-header">
+        <AnnounceBar />
+        <Nav items={navItems} linktreeUrl={artist?.socialLinks?.linktree} />
+      </header>
       {children}
       <Footer
         socialLinks={artist?.socialLinks}

@@ -213,6 +213,7 @@ export interface ArtistProfile {
     tiktok?: string | null;
     youtube?: string | null;
     soundcloud?: string | null;
+    linktree?: string | null;
   };
   contactEmails?: {
     general?: string | null;

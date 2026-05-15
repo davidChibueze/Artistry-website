@@ -1,13 +1,11 @@
 import { getSiteSettings } from '@/lib/api';
-import Link from 'next/link';
-import { Music } from 'lucide-react';
-import styles from './AnnounceBar.module.css';
+import AnnounceBarClient from './AnnounceBarClient';
 
 export default async function AnnounceBar() {
   const settings = await getSiteSettings().catch(() => null);
   const bar = settings?.announcementBar;
 
-  if (!bar || !bar.enabled) return null;
+  if (!bar || !bar.enabled || !bar.text) return null;
 
   const now = new Date();
   const start = bar.startDate ? new Date(bar.startDate) : null;
@@ -17,14 +15,10 @@ export default async function AnnounceBar() {
   if (end && now > end) return null;
 
   return (
-    <div className="announce-bar">
-      <span>
-        <Music className={styles.icon} />
-        {bar.text}
-      </span>
-      {bar.linkUrl && bar.linkText ? (
-        <Link href={bar.linkUrl}>{bar.linkText} →</Link>
-      ) : null}
-    </div>
+    <AnnounceBarClient
+      text={bar.text}
+      linkText={bar.linkText}
+      linkUrl={bar.linkUrl}
+    />
   );
 }

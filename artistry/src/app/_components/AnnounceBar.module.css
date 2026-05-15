@@ -5,3 +5,46 @@
   vertical-align: middle;
   margin-right: 4px;
 }
+
+.message {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+}
+
+.link {
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.closeBtn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 2px;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.15s, background 0.15s;
+}
+
+.closeBtn:hover {
+  opacity: 1;
+  background: rgba(14, 11, 9, 0.12);
+}
+
+.closeIcon {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2.2;
+}

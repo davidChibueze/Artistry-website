@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import styles from './Nav.module.css';
+import { ArrowUpRight } from 'lucide-react';
 
 interface NavItem {
   label?: string | null;
@@ -14,9 +14,10 @@ interface NavItem {
 
 interface Props {
   items: NavItem[];
+  linktreeUrl?: string | null;
 }
 
-export default function Nav({ items }: Props) {
+export default function Nav({ items, linktreeUrl }: Props) {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -37,7 +38,21 @@ export default function Nav({ items }: Props) {
   return (
     <>
       <nav id="nav" className={scrolled ? 'scrolled' : ''}>
-        <Link className="nav-logo" href="/">poshbugati</Link>
+        <div className="nav-brand">
+          <Link className="nav-logo" href="/">poshbugati</Link>
+          {linktreeUrl && (
+            <a
+              className="nav-linktree-pill"
+              href={linktreeUrl}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="All links (opens in new tab)"
+            >
+              Links
+              <ArrowUpRight aria-hidden="true" />
+            </a>
+          )}
+        </div>
         <ul className="nav-links">
           {items.map(({ label, url, external, cta }) => {
             if (!url) return null;

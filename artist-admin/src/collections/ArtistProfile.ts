@@ -112,6 +112,13 @@ export const ArtistProfile: CollectionConfig = {
           name: 'soundcloud',
           type: 'text',
         },
+        {
+          name: 'linktree',
+          type: 'text',
+          admin: {
+            description: 'Public Linktree URL — shown as a pill next to the logo on every page.',
+          },
+        },
       ],
     },
     {
