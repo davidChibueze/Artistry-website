@@ -40,6 +40,21 @@ export default async function HomePage() {
   const shows = showsRes.docs.slice(0, 3);
   const blogPosts = blogRes.docs;
   const epDate = settings?.epReleaseDate;
+  const featured = releasesRes.docs[0];
+
+  const PLATFORM_COLORS: Record<string, string> = {
+    'Spotify': '#1DB954',
+    'Apple Music': '#FC3C44',
+    'YouTube Music': '#FF0000',
+    'Amazon Music': '#FF9900',
+    'Tidal': '#00FFFF',
+    'Deezer': '#FEAA2D',
+    'SoundCloud': '#FF7700',
+  };
+
+  const streamingLinks = featured?.streamingLinks?.filter(
+    (l): l is { id: string; platform: string; url: string } => !!l.platform && !!l.url
+  ) ?? [];
 
   return (
     <>
@@ -76,12 +91,18 @@ export default async function HomePage() {
       <div className="stream-bar" id="stream-bar">
         <span className="stream-label">Available on</span>
         <div className="stream-platforms">
-          {artist?.socialLinks?.instagram && (
-            <Link className="stream-link" href="/subscribe"><div className="sdot" style={{ background: '#1DB954' }} />Spotify</Link>
-          )}
-          <Link className="stream-link" href="/subscribe"><div className="sdot" style={{ background: '#FC3C44' }} />Apple Music</Link>
-          <Link className="stream-link" href="/subscribe"><div className="sdot" style={{ background: '#FF0000' }} />YouTube Music</Link>
-          <Link className="stream-link" href="/subscribe"><div className="sdot" style={{ background: '#FF7700' }} />SoundCloud</Link>
+          {streamingLinks.map((link) => (
+            <a
+              key={link.id}
+              className="stream-link"
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div className="sdot" style={{ background: PLATFORM_COLORS[link.platform] ?? 'var(--text-muted)' }} />
+              {link.platform}
+            </a>
+          ))}
           <Link href="/subscribe" className={`stream-link ${styles.exclusiveStreamLink}`}>
             <div className="sdot" style={{ background: 'var(--gold)' }} />poshbugati.com — Exclusive
           </Link>
