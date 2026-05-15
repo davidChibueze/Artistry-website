@@ -8,7 +8,10 @@ export const credoInitialize: Endpoint = {
   method: 'post',
   handler: async (req) => {
     try {
-      const body = await req.json()
+      const body = await req.json?.()
+      if (!body) {
+        return Response.json({ error: 'Missing request body' }, { status: 400 })
+      }
       const {
         amount,
         email,
