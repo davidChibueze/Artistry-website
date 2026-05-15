@@ -12,10 +12,48 @@ import type {
   Navigation,
   Subscription,
   ContactSubmission,
-  PayloadResponse,
-  CredoInitializeResponse,
-  CredoCallbackResponse,
 } from '@/payload-types'
+
+interface PayloadResponse<T> {
+  docs: T[]
+  totalDocs: number
+  limit: number
+  totalPages: number
+  page: number
+  pagingCounter: number
+  hasPrevPage: boolean
+  hasNextPage: boolean
+  prevPage: number | null
+  nextPage: number | null
+}
+
+interface CredoInitializeResponse {
+  status: number
+  message: string
+  data: {
+    authorizationUrl: string
+    reference: string
+    credoReference: string
+    crn: string
+  }
+}
+
+interface CredoCallbackResponse {
+  status: number
+  message: string
+  data: {
+    transRef: string
+    businessRef: string
+    debitedAmount: number
+    transAmount: number
+    transFeeAmount: number
+    settlementAmount: number
+    customerId: string
+    transactionDate: string
+    currencyCode: string
+    status: number
+  }
+}
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002/api'
 const API_ORIGIN = API_URL.replace('/api', '')
