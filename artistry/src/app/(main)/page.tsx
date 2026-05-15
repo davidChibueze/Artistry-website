@@ -52,9 +52,9 @@ export default async function HomePage() {
     'SoundCloud': '#FF7700',
   };
 
-  const streamingLinks = featured?.streamingLinks?.filter(
-    (l): l is { id: string; platform: string; url: string } => !!l.platform && !!l.url
-  ) ?? [];
+  const streamingLinks = (featured?.streamingLinks ?? []).filter(
+    (l) => !!l.platform && !!l.url
+  ) as Array<{ id: string; platform: string; url: string }>;
 
   return (
     <>
