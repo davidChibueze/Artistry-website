@@ -213,6 +213,10 @@ export interface ArtistProfile {
     tiktok?: string | null;
     youtube?: string | null;
     soundcloud?: string | null;
+    /**
+     * Public Linktree URL — shown as a pill next to the logo on every page.
+     */
+    linktree?: string | null;
   };
   contactEmails?: {
     general?: string | null;
@@ -760,6 +764,7 @@ export interface ArtistProfileSelect<T extends boolean = true> {
         tiktok?: T;
         youtube?: T;
         soundcloud?: T;
+        linktree?: T;
       };
   contactEmails?:
     | T
