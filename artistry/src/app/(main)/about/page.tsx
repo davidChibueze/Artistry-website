@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AboutPage() {
   const artist = await getArtistProfile().catch(() => null);
 
-  const principles: Array<{ icon: string; title: string; description: string }> = artist?.principles ?? [
+  const principles: Array<{ icon?: string | null; title?: string | null; description?: string | null }> = artist?.principles ?? [
     { icon: 'authenticity', title: 'Cultural Honesty', description: 'Every note carries its origin with pride. Afrobeat rhythms are not decorative — they are structural.' },
     { icon: 'emotion', title: 'Emotional Truth', description: 'Country music taught the world that a song can break you open in three minutes.' },
     { icon: 'movement', title: 'Genre as Movement', description: 'Afro country is a living idea — defined not by rules, but by the willingness to keep crossing lines.' },
