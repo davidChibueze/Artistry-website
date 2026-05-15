@@ -63,11 +63,11 @@ export default async function AboutPage() {
             <div className="bio-text">
               <div className={`section-label ${styles.warmLabel}`}>Full Story</div>
               <h2 className={`section-title ${styles.warmTitle}`}>The <em className={styles.amberEm}>journey</em></h2>
-              <p><strong>{artist?.name || 'Poshbugati'}</strong> is what happens when the dust of the savanna meets the open road. Raised between two musical traditions — one rooted in the pulse and groove of West African rhythm, the other in the wide-open emotional honesty of country soul — he spent years learning that these sounds weren&apos;t opposites. They were always the same conversation.</p>
-              <p>Growing up surrounded by Afrobeat, highlife, and the storytelling traditions of both African and country music, Poshbugati developed an ear for what makes a song land emotionally, regardless of geography. The guitar could be playing under a setting sun in the Sahel or a Tennessee highway — the feeling is the same.</p>
-              <p>His debut EP, <strong>The Switch</strong>, is not an experiment. It is a declaration. A confident first step into territory that belongs to no one yet — and now belongs to him. Each of the five tracks is a chapter in a story about identity, movement, belonging, and joy.</p>
-              <blockquote>&ldquo;Afro country isn&apos;t a trend — it&apos;s a moved-into-new-ground sound. When you press play, you&apos;re invited to move, groove, and discover a world where sun-kissed rhythms meet heartfelt storytelling.&rdquo;</blockquote>
-              <p>Poshbugati is not interested in genre labels as boxes. The Switch uses them as doors — wide open, inviting anyone willing to step through into something genuinely new.</p>
+              <p><strong>{artist?.name || 'Emmanuel George Akpose'}</strong>, better known as Poshbugati, was born in Jos, Plateau State, Nigeria — and has always remained true to his humble beginnings. Originally from Isoko South in Delta State, he was exposed to music at a young age while singing in the church choir. That was when he knew this path was carved out for him.</p>
+              <p>Now a Miami resident, Poshbugati draws inspiration from legends like Afrobeats pioneer <strong>Fela Kuti</strong>, <strong>Tupac</strong>, and <strong>Bob Marley</strong> — using the musicality of those before him to steer his propulsive Afro-pop sound into new territory.</p>
+              <p>With mammoth singles like <strong>&ldquo;AJE&rdquo;</strong> and the <strong>Influencer Whoop Remix</strong> — an Afro-Dancehall collaboration featuring Jamaican reggae star <strong>Gyptian</strong> — he continues to push boundaries. His Amapiano record <strong>&ldquo;Outsiders&rdquo;</strong> is a top-shelf feel-good vibe that further cements his range.</p>
+              <blockquote>&ldquo;With his flexible and multifaceted disposition, Poshbugati is no pushover — he still has in his kitty a collaboration with Bizzy Bone of the legendary Bone Thugs &lsquo;N&rsquo; Harmony.&rdquo;</blockquote>
+              <p>A talent oozing of innate instinct for marking steps in the sands of musical timing — Poshbugati is only just getting started.</p>
             </div>
             <div>
               <div className="timeline">

@@ -11,6 +11,16 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+const PLATFORM_COLORS: Record<string, string> = {
+  'Spotify': '#1DB954',
+  'Apple Music': '#FC3C44',
+  'YouTube Music': '#FF0000',
+  'Amazon Music': '#FF9900',
+  'Tidal': '#00FFFF',
+  'Deezer': '#FEAA2D',
+  'SoundCloud': '#FF7700',
+};
+
 function formatDate(dateStr?: string | null) {
   if (!dateStr) return '';
   return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
@@ -79,27 +89,65 @@ export default async function MusicPage() {
           <div className="section-label">All Releases</div>
           <h2 className="section-title">Discography</h2>
           <div className="releases-grid">
-            {releases.map((release) => (
-              <Link key={release.id} href="/music" className="release-card">
-                <div
-                  className="release-art img-placeholder"
-                  style={{
-                    backgroundImage: getMediaUrl(release.coverImage) ? `url('${getMediaUrl(release.coverImage)}')` : undefined,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    minHeight: 'inherit',
-                  }}
-                />
-                <div className="release-body">
-                  <div className="release-meta">{release.type} · {formatDate(release.releaseDate)} · {release.tracks?.length || 0} Tracks</div>
-                  <div className="release-name">{release.title}</div>
-                  <div className="release-desc">{release.description}</div>
-                  <div className="release-tags">
-                    {release.featured && <span className="badge badge-gold">Latest</span>}
+            {releases.map((release) => {
+              const primaryStream = release.streamingLinks?.[0];
+              const hasBuy = (release.distributionTiers?.length ?? 0) > 0;
+              return (
+                <div key={release.id} className="release-card">
+                  <a
+                    href={primaryStream?.url || '/subscribe'}
+                    target={primaryStream?.url ? '_blank' : undefined}
+                    rel={primaryStream?.url ? 'noopener noreferrer' : undefined}
+                    className="release-art img-placeholder"
+                    style={{
+                      backgroundImage: getMediaUrl(release.coverImage) ? `url('${getMediaUrl(release.coverImage)}')` : undefined,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      minHeight: 'inherit',
+                      display: 'block',
+                      textDecoration: 'none',
+                    }}
+                  />
+                  <div className="release-body">
+                    <div className="release-meta">{release.type} · {formatDate(release.releaseDate)} · {release.tracks?.length || 0} Tracks</div>
+                    <div className="release-name">{release.title}</div>
+                    <div className="release-desc">{release.description}</div>
+                    {release.featured && (
+                      <div className="release-tags">
+                        <span className="badge badge-gold">Latest</span>
+                      </div>
+                    )}
+                    <div className={styles.releasePlatforms}>
+                      {release.streamingLinks?.map((link) => (
+                        <a
+                          key={link.id}
+                          href={link.url || '/subscribe'}
+                          target={link.url ? '_blank' : undefined}
+                          rel={link.url ? 'noopener noreferrer' : undefined}
+                          className={styles.releasePlatformBtn}
+                        >
+                          <span
+                            className={styles.releasePlatformDot}
+                            style={{ background: PLATFORM_COLORS[link.platform ?? ''] ?? 'var(--text-muted)' }}
+                          />
+                          {link.platform}
+                        </a>
+                      ))}
+                      {hasBuy && (
+                        <Link href="/subscribe" className={`${styles.releasePlatformBtn} ${styles.releaseBuyBtn}`}>
+                          Buy · {release.distributionTiers![0].currency} {release.distributionTiers![0].price}
+                        </Link>
+                      )}
+                      {!release.streamingLinks?.length && !hasBuy && (
+                        <Link href="/subscribe" className={`${styles.releasePlatformBtn} ${styles.releaseBuyBtn}`}>
+                          Stream Exclusive
+                        </Link>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </Link>
-            ))}
+              );
+            })}
           </div>
 
           <div className={styles.platformsWrap}>

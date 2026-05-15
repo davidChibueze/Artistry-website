@@ -23,6 +23,7 @@ import { Users } from './collections/Users'
 import { Navigation } from './globals/Navigation'
 import { SiteSettings } from './globals/SiteSettings'
 import { credoCallback } from './endpoints/credo/callback'
+import { credoInitialize } from './endpoints/credo/initialize'
 import { credoWebhook } from './endpoints/credo/webhook'
 import { emailBroadcast } from './endpoints/email/broadcast'
 import { logger } from './lib/logger'
@@ -97,13 +98,17 @@ export default buildConfig({
     Users,
   ],
   globals: [SiteSettings, Navigation],
-  endpoints: [credoCallback, credoWebhook, emailBroadcast],
+  endpoints: [credoInitialize, credoCallback, credoWebhook, emailBroadcast],
   secret: process.env.PAYLOAD_SECRET || '',
   sharp,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  cors: [process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'].filter(Boolean),
+  cors: [
+    process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
+    process.env.FRONTEND_URL,
+    'http://localhost:3002',
+  ].filter(Boolean) as string[],
   plugins: [
     loggingPlugin,
     s3Storage({
