@@ -57,12 +57,22 @@ export default async function AboutPage() {
         </div>
       </div>
 
-      <section className="warm-section">
+      <section
+        className={`bio-feature${artist?.aboutBackgroundImage ? ' has-bg' : ' warm-section'}`}
+        style={
+          artist?.aboutBackgroundImage
+            ? {
+                backgroundImage: `url('${getMediaUrl(artist.aboutBackgroundImage)}')`,
+              }
+            : undefined
+        }
+      >
+        {artist?.aboutBackgroundImage && <div className="bio-feature-overlay" aria-hidden="true" />}
         <div className="bio-section">
           <div className="bio-grid">
             <div className="bio-text">
-              <div className={`section-label ${styles.warmLabel}`}>Full Story</div>
-              <h2 className={`section-title ${styles.warmTitle}`}>The <em className={styles.amberEm}>journey</em></h2>
+              <div className={`section-label ${artist?.aboutBackgroundImage ? '' : styles.warmLabel}`}>Full Story</div>
+              <h2 className={`section-title ${artist?.aboutBackgroundImage ? '' : styles.warmTitle}`}>The <em className={artist?.aboutBackgroundImage ? '' : styles.amberEm}>journey</em></h2>
               <p><strong>{artist?.name || 'Emmanuel George Akpose'}</strong>, better known as Poshbugati, was born in Jos, Plateau State, Nigeria — and has always remained true to his humble beginnings. Originally from Isoko South in Delta State, he was exposed to music at a young age while singing in the church choir. That was when he knew this path was carved out for him.</p>
               <p>Now a Miami resident, Poshbugati draws inspiration from legends like Afrobeats pioneer <strong>Fela Kuti</strong>, <strong>Tupac</strong>, and <strong>Bob Marley</strong> — using the musicality of those before him to steer his propulsive Afro-pop sound into new territory.</p>
               <p>With mammoth singles like <strong>&ldquo;AJE&rdquo;</strong> and the <strong>Influencer Whoop Remix</strong> — an Afro-Dancehall collaboration featuring Jamaican reggae star <strong>Gyptian</strong> — he continues to push boundaries. His Amapiano record <strong>&ldquo;Outsiders&rdquo;</strong> is a top-shelf feel-good vibe that further cements his range.</p>

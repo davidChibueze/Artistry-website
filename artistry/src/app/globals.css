@@ -522,6 +522,34 @@ body {
 .warm-section { background: var(--bg-warm); color: #1a1209; }
 .warm-section .section-label { color: #8a7a65; }
 .warm-section .section-label::before { background: #8a7a65; }
+
+/* About → bio section with full-bleed artist photo and dark overlay. */
+.bio-feature { position: relative; }
+.bio-feature.has-bg {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: var(--text);
+  isolation: isolate;
+}
+.bio-feature.has-bg .bio-section { position: relative; z-index: 1; }
+.bio-feature-overlay {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(14,11,9,0.85) 0%, rgba(14,11,9,0.78) 50%, rgba(14,11,9,0.92) 100%),
+    radial-gradient(ellipse at 30% 50%, rgba(212,160,60,0.18) 0%, rgba(14,11,9,0) 65%);
+}
+.bio-feature.has-bg .bio-text p { color: rgba(240,232,220,0.86); }
+.bio-feature.has-bg .bio-text p strong { color: var(--text); }
+.bio-feature.has-bg .bio-text blockquote {
+  border-left-color: var(--gold);
+  color: rgba(240,232,220,0.92);
+}
+.bio-feature.has-bg .timeline h3 { color: var(--text); }
+.bio-feature.has-bg .tl-item { border-bottom-color: rgba(240,232,220,0.12); }
+.bio-feature.has-bg .tl-year { color: var(--gold); }
+.bio-feature.has-bg .tl-content h4 { color: var(--text); }
+.bio-feature.has-bg .tl-content p { color: var(--text-muted); }
 .values-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; margin-top: 48px; }
 .value-card { padding: 32px; border: 1px solid rgba(26,18,9,0.1); }
 .value-icon { margin-bottom: 16px; }

@@ -39,6 +39,15 @@ export const ArtistProfile: CollectionConfig = {
       relationTo: 'media',
     },
     {
+      name: 'aboutBackgroundImage',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description:
+          'Full-bleed background photo behind the bio section on /about. A dark overlay is applied automatically for text readability. Leave empty to fall back to the existing two-column layout.',
+      },
+    },
+    {
       name: 'principles',
       type: 'array',
       fields: [

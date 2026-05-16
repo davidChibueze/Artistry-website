@@ -176,6 +176,10 @@ export interface ArtistProfile {
   } | null;
   heroImage?: (number | null) | Media;
   portraitImage?: (number | null) | Media;
+  /**
+   * Full-bleed background photo behind the bio section on /about. A dark overlay is applied automatically for text readability. Leave empty to fall back to the existing two-column layout.
+   */
+  aboutBackgroundImage?: (number | null) | Media;
   principles?:
     | {
         icon?: string | null;
@@ -990,6 +994,7 @@ export interface ArtistProfileSelect<T extends boolean = true> {
   bio?: T;
   heroImage?: T;
   portraitImage?: T;
+  aboutBackgroundImage?: T;
   principles?:
     | T
     | {
