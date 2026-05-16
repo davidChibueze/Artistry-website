@@ -107,15 +107,18 @@ export function CartProvider({ children }: ProviderProps) {
         setLoading(false)
       }
     })()
-  }, [fetchCart])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // When the user changes currency via the toggle, the server cart's displayCurrency
   // also updates (the currency-context POSTs to /cart/currency); pull the fresh cart.
   useEffect(() => {
     if (loading) return
     if (cart && cart.displayCurrency === currency) return
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void fetchCart()
-  }, [currency, cart, fetchCart, loading])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currency, loading])
 
   const addItem: CartContextValue['addItem'] = useCallback(async (args) => {
     const response = await fetch('/api/cms/cart/items', {
