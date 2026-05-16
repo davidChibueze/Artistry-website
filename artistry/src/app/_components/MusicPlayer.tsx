@@ -6,19 +6,23 @@ import DistributionModal from './DistributionModal';
 import styles from './MusicPlayer.module.css';
 
 export interface Track {
+  id?: string | null;
   n?: number | null;
   name?: string | null;
   sub?: string | null;
   dur?: string | null;
   badge?: string | null;
   previewUrl?: string | null;
+  priceUSD?: number | null;
+  priceNGN?: number | null;
 }
 
-interface DistributionTier {
+export interface DistributionTier {
+  id?: string | null;
   label?: string | null;
   description?: string | null;
-  price?: number | null;
-  currency?: string | null;
+  priceUSD?: number | null;
+  priceNGN?: number | null;
 }
 
 interface StreamingLink {
@@ -27,6 +31,7 @@ interface StreamingLink {
 }
 
 interface Props {
+  releaseId: number | string;
   tracks: Track[];
   releaseTitle?: string | null;
   releaseType?: string | null;
@@ -36,7 +41,14 @@ interface Props {
 
 const PREVIEW_LIMIT = 30;
 
-export default function MusicPlayer({ tracks, releaseTitle = 'The Switch', releaseType = 'EP', streamingLinks, distributionTiers }: Props) {
+export default function MusicPlayer({
+  releaseId,
+  tracks,
+  releaseTitle = 'The Switch',
+  releaseType = 'EP',
+  streamingLinks,
+  distributionTiers,
+}: Props) {
   const [previewingN, setPreviewingN] = useState<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -161,6 +173,7 @@ export default function MusicPlayer({ tracks, releaseTitle = 'The Switch', relea
 
       {modalTrack && (
         <DistributionModal
+          releaseId={releaseId}
           track={modalTrack}
           releaseTitle={releaseTitle}
           releaseType={releaseType}

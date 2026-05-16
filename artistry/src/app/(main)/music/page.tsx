@@ -35,12 +35,15 @@ export default async function MusicPage() {
   const featured = releases.find(r => r.featured) ?? releases[0];
 
   const cmsTracks = featured?.tracks?.map(t => ({
+    id: t.id,
     n: t.number,
     name: t.title,
     sub: t.subtitle || `Afro Country`,
     dur: t.duration,
     badge: t.badge || '',
     previewUrl: t.previewUrl || getMediaUrl(t.audioFile),
+    priceUSD: t.priceUSD,
+    priceNGN: t.priceNGN,
   })) ?? [];
 
   return (
@@ -76,6 +79,7 @@ export default async function MusicPage() {
                     <Link href="/music" className="btn btn-outline">Full EP Details</Link>
                   </div>
                   <MusicPlayer
+                    releaseId={featured.id}
                     tracks={cmsTracks}
                     releaseTitle={featured.title}
                     releaseType={featured.type}

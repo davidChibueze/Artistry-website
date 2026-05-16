@@ -27,24 +27,6 @@ interface PayloadResponse<T> {
   nextPage: number | null
 }
 
-interface CredoInitializeResponse {
-  status: number
-  message: string
-  data: {
-    authorizationUrl: string
-    reference: string
-    credoReference: string
-    crn: string
-  }
-}
-
-interface CredoCallbackResponse {
-  status: 'success' | 'failed'
-  message: string
-  orderNumber?: string
-  downloadToken?: string | null
-}
-
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api'
 const API_ORIGIN = API_URL.replace(/\/api\/?$/, '')
 
@@ -298,30 +280,4 @@ export async function createContactSubmission(data: {
     method: 'POST',
     body: JSON.stringify(data),
   })
-}
-
-// ── Payments (Credo) ──
-
-export async function initializePayment(data: {
-  amount: number
-  email: string
-  currency: string
-  reference: string
-  callbackUrl: string
-  customerFirstName?: string
-  customerLastName?: string
-  customerPhoneNumber?: string
-  narration?: string
-  metadata?: Record<string, unknown>
-}) {
-  return fetchAPI<CredoInitializeResponse>('/credo/initialize', {
-    method: 'POST',
-    body: JSON.stringify(data),
-  })
-}
-
-export async function verifyPayment(transRef: string) {
-  return fetchAPI<CredoCallbackResponse>(
-    `/credo/callback${buildQueryString({ transRef })}`
-  )
 }

@@ -3,7 +3,11 @@ import type { Order } from '../payload-types'
 import { formatMoney, type SupportedCurrency } from './currency'
 
 export function getSiteUrl(): string {
+  // The "site URL" is the customer-facing storefront, where order links, magic
+  // links, and payment return URLs send people. Defaults make sense for the
+  // single-host case (admin and storefront on the same domain).
   return (
+    process.env.STOREFRONT_URL ||
     process.env.NEXT_PUBLIC_SITE_URL ||
     process.env.NEXT_PUBLIC_SERVER_URL ||
     'https://poshbugati.com'
