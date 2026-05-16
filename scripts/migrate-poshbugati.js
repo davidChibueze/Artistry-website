@@ -663,17 +663,13 @@ function sanitizeReleasePayload(release, coverImageValue) {
     distributionTiers: (release.distributionTiers || []).map((tier) => ({
       label: tier.label,
       description: tier.description || undefined,
-      price: Number.isFinite(tier.price) ? tier.price : undefined,
-      currency: tier.currency || 'USD',
+      priceUSD: Number.isFinite(tier.price) ? tier.price : (Number.isFinite(tier.priceUSD) ? tier.priceUSD : 0),
+      priceNGN: Number.isFinite(tier.priceNGN) ? tier.priceNGN : 0,
     })),
   }
 }
 
 async function upsertRelease(release) {
-  if (!Number.isFinite(release.coverImageId)) {
-    throw new Error(`Missing numeric cover image ID for ${release.title}.`)
-  }
-
   const existing = await findOne('releases', 'title', release.title)
   const payload = sanitizeReleasePayload(release, release.coverImageId)
   const retryPayload = sanitizeReleasePayload(release, String(release.coverImageId))
@@ -925,7 +921,7 @@ async function main() {
       release.coverImageId = coverMedia.id
     } catch (error) {
       pushFailure('media', `${release.title} cover art`, error)
-      continue
+      release.coverImageId = null
     }
 
     try {
