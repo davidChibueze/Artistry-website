@@ -75,8 +75,8 @@ export default async function HomePage() {
             </Link>
             <span className="hero-date"><strong>{epDate ? formatDate(epDate) : 'May 22, 2025'}</strong> · poshbugati.com</span>
           </div>
-          <HeroSocials socials={artist?.socialLinks} />
         </div>
+        <HeroSocials socials={artist?.socialLinks} />
         <a className="scroll-hint" href="#stream-bar">
           <div className="scroll-line" />
           <span>Scroll</span>
