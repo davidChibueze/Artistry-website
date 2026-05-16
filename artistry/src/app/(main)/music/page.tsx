@@ -98,25 +98,24 @@ export default async function MusicPage() {
               const detailHref = `/music/${release.slug}`;
               const hasBuy = (release.distributionTiers?.length ?? 0) > 0;
               return (
-                <div key={release.id} className="release-card">
+                <div key={release.id} className={`release-card ${styles.cardLinkable}`}>
                   <Link
                     href={detailHref}
+                    className={styles.cardOverlay}
+                    aria-label={`Open ${release.title}`}
+                  />
+                  <div
                     className="release-art img-placeholder"
                     style={{
                       backgroundImage: getMediaUrl(release.coverImage) ? `url('${getMediaUrl(release.coverImage)}')` : undefined,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center',
                       minHeight: 'inherit',
-                      display: 'block',
-                      textDecoration: 'none',
                     }}
-                    aria-label={`Open ${release.title}`}
                   />
                   <div className="release-body">
                     <div className="release-meta">{release.type} · {formatDate(release.releaseDate)} · {release.tracks?.length || 0} Tracks</div>
-                    <Link href={detailHref} className="release-name" style={{ color: 'inherit', textDecoration: 'none' }}>
-                      {release.title}
-                    </Link>
+                    <div className="release-name">{release.title}</div>
                     {release.description && (
                       <ReleaseDescription
                         title={release.title}
@@ -148,11 +147,6 @@ export default async function MusicPage() {
                       {hasBuy && (
                         <Link href={detailHref} className={`${styles.releasePlatformBtn} ${styles.releaseBuyBtn}`}>
                           Buy · {formatMoney(priceFor(release.distributionTiers![0], currency), currency)}
-                        </Link>
-                      )}
-                      {!streamHref && !hasBuy && (
-                        <Link href={detailHref} className={`${styles.releasePlatformBtn} ${styles.releaseBuyBtn}`}>
-                          View Details
                         </Link>
                       )}
                     </div>

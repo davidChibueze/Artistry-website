@@ -15,6 +15,25 @@
   border-color: rgba(212, 160, 60, 0.25);
 }
 
+/* Whole-card-clickable pattern.
+   release-card stays a non-link container; the overlay link below covers it
+   and any element that should remain individually clickable bumps z-index above it. */
+.cardLinkable {
+  position: relative;
+}
+
+.cardOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  /* Indicator only; no visible affordance. */
+}
+
+.cardOverlay:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: -2px;
+}
+
 .releasePlatforms {
   display: flex;
   flex-wrap: wrap;
@@ -22,6 +41,8 @@
   margin-top: 16px;
   padding-top: 16px;
   border-top: 1px solid var(--border);
+  position: relative;
+  z-index: 2;
 }
 
 .releasePlatformBtn {

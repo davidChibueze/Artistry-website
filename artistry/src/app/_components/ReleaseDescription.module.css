@@ -26,6 +26,10 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
   opacity: 0.85;
+  /* Sit above the card overlay link so the click opens the modal,
+     not the card's navigation. */
+  position: relative;
+  z-index: 2;
 }
 
 .seeMore:hover {
