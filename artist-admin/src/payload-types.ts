@@ -223,6 +223,10 @@ export interface ArtistProfile {
      * Public Linktree URL — shown as a pill next to the logo on every page.
      */
     linktree?: string | null;
+    /**
+     * Artist-wide stream landing page — used by the "Find the music everywhere" button on the music page. Typically a Linktree, Songwhip, or distributor aggregator.
+     */
+    streamUrl?: string | null;
   };
   contactEmails?: {
     general?: string | null;
@@ -1018,6 +1022,7 @@ export interface ArtistProfileSelect<T extends boolean = true> {
         youtube?: T;
         soundcloud?: T;
         linktree?: T;
+        streamUrl?: T;
       };
   contactEmails?:
     | T
@@ -1515,10 +1520,21 @@ export interface SiteSetting {
  */
 export interface Navigation {
   id: number;
+  /**
+   * Site-wide navigation links. Use the Locations field on each item to control whether it appears in the header, footer, or both.
+   */
   navItems?:
     | {
         label?: string | null;
         url?: string | null;
+        /**
+         * Where this link appears. Leave empty to hide everywhere without deleting the row.
+         */
+        locations?: ('header' | 'footer')[] | null;
+        /**
+         * Only used when Footer is selected above. Items sharing the same column heading group together — e.g. type "Music" on three items and they appear in one column titled Music. Leave blank to fall under a default "Links" column.
+         */
+        footerColumn?: string | null;
         external?: boolean | null;
         cta?: boolean | null;
         id?: string | null;
@@ -1562,6 +1578,8 @@ export interface NavigationSelect<T extends boolean = true> {
     | {
         label?: T;
         url?: T;
+        locations?: T;
+        footerColumn?: T;
         external?: T;
         cta?: T;
         id?: T;

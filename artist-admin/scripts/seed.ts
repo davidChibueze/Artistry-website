@@ -1,9 +1,9 @@
 import 'dotenv/config'
-import { getPayload } from 'payload'
+import { getPayload, type Payload } from 'payload'
 import config from '../src/payload.config'
 
-async function seed() {
-  const payload = await getPayload({ config })
+export async function seed(payloadInstance?: Payload) {
+  const payload = payloadInstance ?? (await getPayload({ config }))
 
   console.log('Seeding database...')
 
@@ -425,11 +425,14 @@ async function seed() {
 
     console.log('Seeding complete!')
     console.log('Admin user: admin@poshbugati.com / password123')
-    process.exit(0)
   } catch (error) {
     console.error('Error seeding database:', error)
-    process.exit(1)
+    throw error
   }
 }
 
-seed()
+if (import.meta.url === `file://${process.argv[1]}`) {
+  seed()
+    .then(() => process.exit(0))
+    .catch(() => process.exit(1))
+}

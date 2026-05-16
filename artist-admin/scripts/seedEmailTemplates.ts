@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import { getPayload } from 'payload'
+import { getPayload, type Payload } from 'payload'
 import config from '../src/payload.config'
 
 interface TemplateSeed {
@@ -145,8 +145,8 @@ const SEEDS: TemplateSeed[] = [
   },
 ]
 
-async function seed() {
-  const payload = await getPayload({ config })
+export async function seedEmailTemplates(payloadInstance?: Payload) {
+  const payload = payloadInstance ?? (await getPayload({ config }))
 
   console.log(`Seeding ${SEEDS.length} email templates (idempotent)...`)
 
@@ -182,10 +182,13 @@ async function seed() {
   }
 
   console.log(`Done. created=${created} skipped=${skipped}`)
-  process.exit(0)
 }
 
-seed().catch((err) => {
-  console.error('Email template seed failed:', err)
-  process.exit(1)
-})
+if (import.meta.url === `file://${process.argv[1]}`) {
+  seedEmailTemplates()
+    .then(() => process.exit(0))
+    .catch((err) => {
+      console.error('Email template seed failed:', err)
+      process.exit(1)
+    })
+}
