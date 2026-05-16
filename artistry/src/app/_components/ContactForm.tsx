@@ -2,27 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Mic, Newspaper, Film, Handshake } from 'lucide-react';
 import { createContactSubmission } from '@/lib/api';
 import styles from './ContactForm.module.css';
-
-const inquiryTypes = [
-  { key: 'booking', icon: <Mic className="icon-xl iq-icon" />, title: 'Live Booking', desc: 'Shows, festivals, private events, residencies, and tours.' },
-  { key: 'press', icon: <Newspaper className="icon-xl iq-icon" />, title: 'Press & Media', desc: 'Interviews, features, reviews, press passes, and media coverage.' },
-  { key: 'sync', icon: <Film className="icon-xl iq-icon" />, title: 'Sync & Licensing', desc: 'Film, TV, advertising, games, and other sync placements.' },
-  { key: 'collab', icon: <Handshake className="icon-xl iq-icon" />, title: 'Collaboration', desc: 'Artist features, co-writing, brand partnerships, and creative projects.' },
-];
-
-const inquiryTypeMap: Record<string, string> = {
-  booking: 'Booking',
-  press: 'Press',
-  sync: 'Other',
-  collab: 'Collaboration',
-  festival: 'Booking',
-  brand: 'Collaboration',
-  podcast: 'Press',
-  other: 'Other',
-};
 
 interface ContactEmails {
   general?: string | null;
@@ -43,18 +24,12 @@ interface Props {
 }
 
 export default function ContactForm({ contactEmails, socialLinks }: Props) {
-  const [activeInquiry, setActiveInquiry] = useState('booking');
-  const [form, setForm] = useState({ name: '', email: '', org: '', type: 'booking', date: '', budget: '', msg: '' });
+  const [form, setForm] = useState({ name: '', email: '', msg: '' });
   const [errors, setErrors] = useState<string[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const selectInquiry = (key: string) => {
-    setActiveInquiry(key);
-    setForm(f => ({ ...f, type: key }));
-  };
-
-  const update = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const update = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm(f => ({ ...f, [field]: e.target.value }));
   };
 
@@ -62,7 +37,6 @@ export default function ContactForm({ contactEmails, socialLinks }: Props) {
     const missing: string[] = [];
     if (!form.name.trim()) missing.push('name');
     if (!form.email.trim()) missing.push('email');
-    if (!form.type) missing.push('type');
     if (!form.msg.trim()) missing.push('msg');
     setErrors(missing);
     if (missing.length) {
@@ -74,10 +48,6 @@ export default function ContactForm({ contactEmails, socialLinks }: Props) {
       await createContactSubmission({
         name: form.name.trim(),
         email: form.email.trim(),
-        organization: form.org.trim() || undefined,
-        inquiryType: inquiryTypeMap[form.type] || 'Other',
-        eventDate: form.date.trim() || undefined,
-        budget: form.budget.trim() || undefined,
         message: form.msg.trim(),
       });
       setSubmitted(true);
@@ -96,21 +66,6 @@ export default function ContactForm({ contactEmails, socialLinks }: Props) {
 
   return (
     <>
-      <div className="section-label">What&apos;s this about?</div>
-      <div className="inquiry-grid">
-        {inquiryTypes.map(({ key, icon, title, desc }) => (
-          <div
-            key={key}
-            className={`inquiry-card${activeInquiry === key ? ' active' : ''}`}
-            onClick={() => selectInquiry(key)}
-          >
-            {icon}
-            <div className="iq-title">{title}</div>
-            <div className="iq-desc">{desc}</div>
-          </div>
-        ))}
-      </div>
-
       <div className="contact-layout">
         <div>
           <div className="section-label">Direct Contacts</div>
@@ -168,7 +123,7 @@ export default function ContactForm({ contactEmails, socialLinks }: Props) {
               {socialLinks?.youtube && (
                 <a href={socialLinks.youtube} className="soc-btn" target="_blank" rel="noreferrer">
                   <svg className="soc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
+                    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
                     <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/>
                   </svg>
                   YouTube
@@ -184,54 +139,17 @@ export default function ContactForm({ contactEmails, socialLinks }: Props) {
 
           {!submitted ? (
             <div>
-              <div className="form-row">
-                <div className="form-group">
-                  <label className="form-label" htmlFor="cfName">Name *</label>
-                  <input type="text" id="cfName" className={`form-input${errClass('name')}`} placeholder="Your full name" value={form.name} onChange={update('name')} />
-                </div>
-                <div className="form-group">
-                  <label className="form-label" htmlFor="cfEmail">Email *</label>
-                  <input type="email" id="cfEmail" className={`form-input${errClass('email')}`} placeholder="your@email.com" value={form.email} onChange={update('email')} />
-                </div>
+              <div className="form-group">
+                <label className="form-label" htmlFor="cfName">Name *</label>
+                <input type="text" id="cfName" className={`form-input${errClass('name')}`} placeholder="Your full name" value={form.name} onChange={update('name')} />
               </div>
               <div className="form-group">
-                <label className="form-label" htmlFor="cfOrg">Organisation / Publication</label>
-                <input type="text" id="cfOrg" className="form-input" placeholder="Company, venue, or publication name" value={form.org} onChange={update('org')} />
-              </div>
-              <div className="form-group">
-                <label className="form-label" htmlFor="cfType">Inquiry Type *</label>
-                <select id="cfType" className={`form-input form-select${errClass('type')}`} value={form.type} onChange={update('type')}>
-                  <option value="">Select one…</option>
-                  <option value="booking">Live Booking / Performance</option>
-                  <option value="festival">Festival / Showcase</option>
-                  <option value="press">Press &amp; Media Interview</option>
-                  <option value="sync">Sync &amp; Licensing</option>
-                  <option value="collab">Artist Collaboration</option>
-                  <option value="brand">Brand Partnership</option>
-                  <option value="podcast">Podcast Guest Pitch</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-              <div className="form-row">
-                <div className="form-group">
-                  <label className="form-label" htmlFor="cfDate">Proposed Date</label>
-                  <input type="text" id="cfDate" className="form-input" placeholder="e.g. June 21, 2025" value={form.date} onChange={update('date')} />
-                </div>
-                <div className="form-group">
-                  <label className="form-label" htmlFor="cfBudget">Budget Range</label>
-                  <select id="cfBudget" className="form-input form-select" value={form.budget} onChange={update('budget')}>
-                    <option value="">Select range…</option>
-                    <option>Under $5,000</option>
-                    <option>$5,000 – $15,000</option>
-                    <option>$15,000 – $50,000</option>
-                    <option>$50,000+</option>
-                    <option>N/A</option>
-                  </select>
-                </div>
+                <label className="form-label" htmlFor="cfEmail">Email *</label>
+                <input type="email" id="cfEmail" className={`form-input${errClass('email')}`} placeholder="your@email.com" value={form.email} onChange={update('email')} />
               </div>
               <div className="form-group">
                 <label className="form-label" htmlFor="cfMsg">Message *</label>
-                <textarea id="cfMsg" className={`form-textarea ${styles.textarea}`} placeholder="Tell us about your project, event, or idea. The more detail, the faster we can respond…" value={form.msg} onChange={update('msg') as React.ChangeEventHandler<HTMLTextAreaElement>} />
+                <textarea id="cfMsg" className={`form-textarea ${styles.textarea}`} placeholder="Tell us about your project, event, or idea…" value={form.msg} onChange={update('msg') as React.ChangeEventHandler<HTMLTextAreaElement>} />
               </div>
               {errors.includes('submit') && (
                 <p className={styles.fieldError}>Something went wrong. Please try again.</p>
