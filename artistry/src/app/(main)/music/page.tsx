@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import MusicPlayer from '../../_components/MusicPlayer';
 import { getReleases, getMediaUrl } from '@/lib/api';
+import { detectInitialCurrency } from '@/lib/currency-detect';
+import { formatMoney, priceFor } from '@/lib/money';
 import styles from './page.module.css';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -28,6 +30,7 @@ function formatDate(dateStr?: string | null) {
 
 export default async function MusicPage() {
   const releasesRes = await getReleases().catch(() => ({ docs: [], totalDocs: 0 }));
+  const currency = await detectInitialCurrency();
   const releases = releasesRes.docs;
   const featured = releases.find(r => r.featured) ?? releases[0];
 
@@ -135,7 +138,7 @@ export default async function MusicPage() {
                       ))}
                       {hasBuy && (
                         <Link href="/subscribe" className={`${styles.releasePlatformBtn} ${styles.releaseBuyBtn}`}>
-                          Buy · {release.distributionTiers![0].currency} {release.distributionTiers![0].price}
+                          Buy · {formatMoney(priceFor(release.distributionTiers![0], currency), currency)}
                         </Link>
                       )}
                       {!release.streamingLinks?.length && !hasBuy && (

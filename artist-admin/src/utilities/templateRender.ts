@@ -1,8 +1,9 @@
 import type { Payload } from 'payload'
-import type { SerializedEditorState } from 'lexical'
 import { convertLexicalToHTML } from '@payloadcms/richtext-lexical/html'
 
 import type { EmailTemplate } from '../payload-types'
+
+type LexicalData = Parameters<typeof convertLexicalToHTML>[0]['data']
 
 export type TemplateVars = Record<string, string | number | null | undefined>
 
@@ -97,7 +98,7 @@ export async function renderTemplate(
 
   const subject = substituteVars(template.subject ?? '', vars, 'text')
 
-  const lexicalData = template.body as unknown as SerializedEditorState
+  const lexicalData = template.body as unknown as LexicalData
   const bodyHtml = convertLexicalToHTML({
     data: lexicalData,
     disableContainer: true,
