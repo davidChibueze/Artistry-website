@@ -3,6 +3,7 @@ import * as migration_20260515_012004_add_s3_prefix_to_media from './20260515_01
 import * as migration_20260515_013117 from './20260515_013117';
 import * as migration_20260515_043358_linktree_on_artist_profile from './20260515_043358_linktree_on_artist_profile';
 import * as migration_20260516_071527 from './20260516_071527';
+import * as migration_20260516_085527_artist_stream_url from './20260516_085527_artist_stream_url';
 
 export const migrations = [
   {
@@ -28,6 +29,11 @@ export const migrations = [
   {
     up: migration_20260516_071527.up,
     down: migration_20260516_071527.down,
-    name: '20260516_071527'
+    name: '20260516_071527',
+  },
+  {
+    up: migration_20260516_085527_artist_stream_url.up,
+    down: migration_20260516_085527_artist_stream_url.down,
+    name: '20260516_085527_artist_stream_url'
   },
 ];
