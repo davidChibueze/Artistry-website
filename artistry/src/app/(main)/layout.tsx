@@ -24,6 +24,8 @@ export default async function MainLayout({ children }: { children: React.ReactNo
     { label: 'Booking', url: '/contact', external: false, cta: false },
   ];
 
+  console.log(navData?.navItems)
+
   return (
     <Providers initialCurrency={initialCurrency}>
       <header className="site-header">
