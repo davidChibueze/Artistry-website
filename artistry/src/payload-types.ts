@@ -313,15 +313,10 @@ export interface Release {
         id?: string | null;
       }[]
     | null;
-  streamingLinks?:
-    | {
-        platform?:
-          | ('Spotify' | 'Apple Music' | 'YouTube Music' | 'Amazon Music' | 'Tidal' | 'Deezer' | 'SoundCloud')
-          | null;
-        url?: string | null;
-        id?: string | null;
-      }[]
-    | null;
+  /**
+   * Where the Stream button on the storefront should send listeners — typically a Linktree, Songwhip, or distributor landing page that fans out to every platform.
+   */
+  streamUrl?: string | null;
   distributionTiers?:
     | {
         label?: string | null;
@@ -1060,13 +1055,7 @@ export interface ReleasesSelect<T extends boolean = true> {
         priceNGN?: T;
         id?: T;
       };
-  streamingLinks?:
-    | T
-    | {
-        platform?: T;
-        url?: T;
-        id?: T;
-      };
+  streamUrl?: T;
   distributionTiers?:
     | T
     | {

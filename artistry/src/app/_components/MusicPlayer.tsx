@@ -25,17 +25,12 @@ export interface DistributionTier {
   priceNGN?: number | null;
 }
 
-interface StreamingLink {
-  platform?: string | null;
-  url?: string | null;
-}
-
 interface Props {
   releaseId: number | string;
   tracks: Track[];
   releaseTitle?: string | null;
   releaseType?: string | null;
-  streamingLinks?: StreamingLink[] | null;
+  streamUrl?: string | null;
   distributionTiers?: DistributionTier[] | null;
 }
 
@@ -46,7 +41,7 @@ export default function MusicPlayer({
   tracks,
   releaseTitle = 'The Switch',
   releaseType = 'EP',
-  streamingLinks,
+  streamUrl,
   distributionTiers,
 }: Props) {
   const [previewingN, setPreviewingN] = useState<number | null>(null);
@@ -178,7 +173,7 @@ export default function MusicPlayer({
           releaseTitle={releaseTitle}
           releaseType={releaseType}
           trackCount={tracks.length}
-          streamingLinks={streamingLinks}
+          streamUrl={streamUrl}
           distributionTiers={distributionTiers}
           onClose={() => setModalTrack(null)}
           onPreview={() => togglePreview(modalTrack)}

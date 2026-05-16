@@ -13,16 +13,6 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const PLATFORM_COLORS: Record<string, string> = {
-  'Spotify': '#1DB954',
-  'Apple Music': '#FC3C44',
-  'YouTube Music': '#FF0000',
-  'Amazon Music': '#FF9900',
-  'Tidal': '#00FFFF',
-  'Deezer': '#FEAA2D',
-  'SoundCloud': '#FF7700',
-};
-
 function formatDate(dateStr?: string | null) {
   if (!dateStr) return '';
   return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
@@ -83,7 +73,7 @@ export default async function MusicPage() {
                     tracks={cmsTracks}
                     releaseTitle={featured.title}
                     releaseType={featured.type}
-                    streamingLinks={featured.streamingLinks}
+                    streamUrl={featured.streamUrl}
                     distributionTiers={featured.distributionTiers}
                   />
                 </div>
@@ -97,14 +87,14 @@ export default async function MusicPage() {
           <h2 className="section-title">Discography</h2>
           <div className="releases-grid">
             {releases.map((release) => {
-              const primaryStream = release.streamingLinks?.[0];
+              const streamHref = release.streamUrl ?? null;
               const hasBuy = (release.distributionTiers?.length ?? 0) > 0;
               return (
                 <div key={release.id} className="release-card">
                   <a
-                    href={primaryStream?.url || '/subscribe'}
-                    target={primaryStream?.url ? '_blank' : undefined}
-                    rel={primaryStream?.url ? 'noopener noreferrer' : undefined}
+                    href={streamHref || '/subscribe'}
+                    target={streamHref ? '_blank' : undefined}
+                    rel={streamHref ? 'noopener noreferrer' : undefined}
                     className="release-art img-placeholder"
                     style={{
                       backgroundImage: getMediaUrl(release.coverImage) ? `url('${getMediaUrl(release.coverImage)}')` : undefined,
@@ -125,27 +115,26 @@ export default async function MusicPage() {
                       </div>
                     )}
                     <div className={styles.releasePlatforms}>
-                      {release.streamingLinks?.map((link) => (
+                      {streamHref && (
                         <a
-                          key={link.id}
-                          href={link.url || '/subscribe'}
-                          target={link.url ? '_blank' : undefined}
-                          rel={link.url ? 'noopener noreferrer' : undefined}
+                          href={streamHref}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           className={styles.releasePlatformBtn}
                         >
                           <span
                             className={styles.releasePlatformDot}
-                            style={{ background: PLATFORM_COLORS[link.platform ?? ''] ?? 'var(--text-muted)' }}
+                            style={{ background: 'var(--gold)' }}
                           />
-                          {link.platform}
+                          Stream
                         </a>
-                      ))}
+                      )}
                       {hasBuy && (
                         <Link href="/subscribe" className={`${styles.releasePlatformBtn} ${styles.releaseBuyBtn}`}>
                           Buy · {formatMoney(priceFor(release.distributionTiers![0], currency), currency)}
                         </Link>
                       )}
-                      {!release.streamingLinks?.length && !hasBuy && (
+                      {!streamHref && !hasBuy && (
                         <Link href="/subscribe" className={`${styles.releasePlatformBtn} ${styles.releaseBuyBtn}`}>
                           Stream Exclusive
                         </Link>

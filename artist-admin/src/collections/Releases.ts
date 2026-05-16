@@ -124,27 +124,13 @@ export const Releases: CollectionConfig = {
       ],
     },
     {
-      name: 'streamingLinks',
-      type: 'array',
-      fields: [
-        {
-          name: 'platform',
-          type: 'select',
-          options: [
-            { label: 'Spotify', value: 'Spotify' },
-            { label: 'Apple Music', value: 'Apple Music' },
-            { label: 'YouTube Music', value: 'YouTube Music' },
-            { label: 'Amazon Music', value: 'Amazon Music' },
-            { label: 'Tidal', value: 'Tidal' },
-            { label: 'Deezer', value: 'Deezer' },
-            { label: 'SoundCloud', value: 'SoundCloud' },
-          ],
-        },
-        {
-          name: 'url',
-          type: 'text',
-        },
-      ],
+      name: 'streamUrl',
+      type: 'text',
+      admin: {
+        description:
+          'Where the Stream button on the storefront should send listeners — typically a Linktree, Songwhip, or distributor landing page that fans out to every platform.',
+        placeholder: 'https://linktr.ee/poshbugati',
+      },
     },
     {
       name: 'distributionTiers',

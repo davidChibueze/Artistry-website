@@ -42,19 +42,7 @@ export default async function HomePage() {
   const epDate = settings?.epReleaseDate;
   const featured = releasesRes.docs[0];
 
-  const PLATFORM_COLORS: Record<string, string> = {
-    'Spotify': '#1DB954',
-    'Apple Music': '#FC3C44',
-    'YouTube Music': '#FF0000',
-    'Amazon Music': '#FF9900',
-    'Tidal': '#00FFFF',
-    'Deezer': '#FEAA2D',
-    'SoundCloud': '#FF7700',
-  };
-
-  const streamingLinks = (featured?.streamingLinks ?? []).filter(
-    (l) => !!l.platform && !!l.url
-  ) as Array<{ id: string; platform: string; url: string }>;
+  const streamUrl = featured?.streamUrl ?? null;
 
   return (
     <>
@@ -91,18 +79,17 @@ export default async function HomePage() {
       <div className="stream-bar" id="stream-bar">
         <span className="stream-label">Available on</span>
         <div className="stream-platforms">
-          {streamingLinks.map((link) => (
+          {streamUrl && (
             <a
-              key={link.id}
               className="stream-link"
-              href={link.url}
+              href={streamUrl}
               target="_blank"
               rel="noopener noreferrer"
             >
-              <div className="sdot" style={{ background: PLATFORM_COLORS[link.platform] ?? 'var(--text-muted)' }} />
-              {link.platform}
+              <div className="sdot" style={{ background: 'var(--gold)' }} />
+              Stream
             </a>
-          ))}
+          )}
           <Link href="/subscribe" className={`stream-link ${styles.exclusiveStreamLink}`}>
             <div className="sdot" style={{ background: 'var(--gold)' }} />poshbugati.com — Exclusive
           </Link>

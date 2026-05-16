@@ -8,30 +8,18 @@ import { formatMoney, priceFor } from '@/lib/money';
 import type { DistributionTier, Track } from './MusicPlayer';
 import styles from './DistributionModal.module.css';
 
-interface StreamingLink {
-  platform?: string | null;
-  url?: string | null;
-}
-
 interface Props {
   releaseId: number | string;
   track: Track;
   releaseTitle?: string | null;
   releaseType?: string | null;
   trackCount: number;
-  streamingLinks?: StreamingLink[] | null;
+  streamUrl?: string | null;
   distributionTiers?: DistributionTier[] | null;
   onClose: () => void;
   onPreview: () => void;
   isPreviewPlaying: boolean;
 }
-
-const DEFAULT_PLATFORMS = [
-  { id: 'spotify', name: 'Spotify', color: '#1DB954', href: '#' },
-  { id: 'apple', name: 'Apple Music', color: '#FC3C44', href: '#' },
-  { id: 'youtube', name: 'YouTube Music', color: '#FF0000', href: '#' },
-  { id: 'soundcloud', name: 'SoundCloud', color: '#FF7700', href: '#' },
-];
 
 type Selection =
   | { kind: 'track' }
@@ -43,7 +31,7 @@ export default function DistributionModal({
   releaseTitle,
   releaseType,
   trackCount,
-  streamingLinks,
+  streamUrl,
   distributionTiers,
   onClose,
   onPreview,
@@ -114,17 +102,6 @@ export default function DistributionModal({
     }
   }
 
-  const platforms = streamingLinks && streamingLinks.length
-    ? streamingLinks
-        .filter((l): l is { platform: string; url: string } => !!l.platform && !!l.url)
-        .map((link, i) => ({
-          id: link.platform.toLowerCase().replace(/\s+/g, '-'),
-          name: link.platform,
-          color: ['#1DB954', '#FC3C44', '#FF0000', '#FF7700', '#8B5CF6'][i % 5],
-          href: link.url,
-        }))
-    : DEFAULT_PLATFORMS;
-
   return (
     <div className={styles.overlay} onClick={handleBackdropClick}>
       <div className={styles.modal}>
@@ -152,12 +129,12 @@ export default function DistributionModal({
         <div className={styles.section}>
           <div className={styles.sectionLabel}>Stream for Free</div>
           <div className={styles.platformRow}>
-            {platforms.map(p => (
-              <a key={p.id} href={p.href} className={styles.platBtn} target="_blank" rel="noreferrer">
-                <span className={styles.platDot} style={{ background: p.color }} />
-                {p.name}
+            {streamUrl && (
+              <a href={streamUrl} className={styles.platBtn} target="_blank" rel="noreferrer">
+                <span className={styles.platDot} style={{ background: 'var(--gold)' }} />
+                Stream
               </a>
-            ))}
+            )}
             <Link href="/subscribe" className={`${styles.platBtn} ${styles.platBtnExclusive}`}>
               <span className={styles.platDot} style={{ background: 'var(--gold)' }} />
               poshbugati.com — Exclusive
