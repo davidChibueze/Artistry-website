@@ -2,6 +2,8 @@ import type { Endpoint } from 'payload'
 import * as Sentry from '@sentry/nextjs'
 import { verifyTransaction, fromLowestUnit } from '../../utilities/credo'
 import { logger } from '../../lib/logger'
+import { afterOrderPaid } from '../checkout/postPayment'
+import type { Order } from '../../payload-types'
 
 export const credoCallback: Endpoint = {
   path: '/credo/callback',
@@ -40,16 +42,20 @@ export const credoCallback: Endpoint = {
 
       const order = existingOrder.docs[0]
 
-      if (order.status !== 'Complete') {
-        await payload.update({
+      if (order.status !== 'Paid' && order.status !== 'Fulfilled') {
+        const updated = (await payload.update({
           collection: 'orders',
           id: order.id,
           data: {
-            status: 'Complete',
+            status: 'Paid',
             credoReference: verification.data.transRef,
+            paymentProvider: 'credo',
+            paidCurrency: 'NGN',
+            paidAmount: fromLowestUnit(verification.data.transAmount),
             total: fromLowestUnit(verification.data.transAmount),
           },
-        })
+        })) as Order
+        await afterOrderPaid(payload, updated)
       }
 
       return Response.json({

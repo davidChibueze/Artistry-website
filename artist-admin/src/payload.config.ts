@@ -9,7 +9,10 @@ import type { Config } from 'payload'
 
 import { ArtistProfile } from './collections/ArtistProfile'
 import { BlogPosts } from './collections/BlogPosts'
+import { Carts } from './collections/Carts'
 import { ContactSubmissions } from './collections/ContactSubmissions'
+import { EmailLogs } from './collections/EmailLogs'
+import { EmailTemplates } from './collections/EmailTemplates'
 import { Media } from './collections/Media'
 import { MediaGallery } from './collections/MediaGallery'
 import { MerchProducts } from './collections/MerchProducts'
@@ -22,9 +25,16 @@ import { TourShows } from './collections/TourShows'
 import { Users } from './collections/Users'
 import { Navigation } from './globals/Navigation'
 import { SiteSettings } from './globals/SiteSettings'
+import { adminEmailResendOrder, adminEmailTest } from './endpoints/adminEmail/handlers'
+import { adminFxUsdToNgn } from './endpoints/adminFx/handler'
+import { cartEndpoints } from './endpoints/cart/handlers'
+import { credoCheckout } from './endpoints/checkout/credo'
+import { paypalCheckoutCapture, paypalCheckoutCreate } from './endpoints/checkout/paypal'
 import { credoCallback } from './endpoints/credo/callback'
 import { credoWebhook } from './endpoints/credo/webhook'
 import { emailBroadcast } from './endpoints/email/broadcast'
+import { orderEndpoints } from './endpoints/orders/handlers'
+import { paypalWebhook } from './endpoints/paypal/webhook'
 import { logger } from './lib/logger'
 
 const filename = fileURLToPath(import.meta.url)
@@ -93,11 +103,27 @@ export default buildConfig({
     Subscriptions,
     ContactSubmissions,
     Orders,
+    Carts,
+    EmailTemplates,
+    EmailLogs,
     Media,
     Users,
   ],
   globals: [SiteSettings, Navigation],
-  endpoints: [credoCallback, credoWebhook, emailBroadcast],
+  endpoints: [
+    credoCallback,
+    credoWebhook,
+    credoCheckout,
+    paypalCheckoutCreate,
+    paypalCheckoutCapture,
+    paypalWebhook,
+    emailBroadcast,
+    adminFxUsdToNgn,
+    adminEmailTest,
+    adminEmailResendOrder,
+    ...cartEndpoints,
+    ...orderEndpoints,
+  ],
   secret: process.env.PAYLOAD_SECRET || '',
   sharp,
   typescript: {

@@ -59,6 +59,15 @@ export const Releases: CollectionConfig = {
       type: 'checkbox',
     },
     {
+      name: 'fxHint',
+      type: 'ui',
+      admin: {
+        components: {
+          Field: '@/components/admin/FxHint',
+        },
+      },
+    },
+    {
       name: 'tracks',
       type: 'array',
       fields: [
@@ -90,6 +99,27 @@ export const Releases: CollectionConfig = {
           name: 'audioFile',
           type: 'upload',
           relationTo: 'media',
+        },
+        {
+          type: 'row',
+          fields: [
+            {
+              name: 'priceUSD',
+              type: 'number',
+              min: 0,
+              admin: {
+                description: 'Per-track USD price. Leave blank if not individually sold.',
+              },
+            },
+            {
+              name: 'priceNGN',
+              type: 'number',
+              min: 0,
+              admin: {
+                description: 'Per-track NGN price.',
+              },
+            },
+          ],
         },
       ],
     },
@@ -129,17 +159,20 @@ export const Releases: CollectionConfig = {
           type: 'text',
         },
         {
-          name: 'price',
-          type: 'number',
-        },
-        {
-          name: 'currency',
-          type: 'select',
-          defaultValue: 'USD',
-          options: [
-            { label: 'USD', value: 'USD' },
-            { label: 'EUR', value: 'EUR' },
-            { label: 'GBP', value: 'GBP' },
+          type: 'row',
+          fields: [
+            {
+              name: 'priceUSD',
+              type: 'number',
+              required: true,
+              min: 0,
+            },
+            {
+              name: 'priceNGN',
+              type: 'number',
+              required: true,
+              min: 0,
+            },
           ],
         },
       ],
