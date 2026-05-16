@@ -55,10 +55,10 @@ export default function Nav({ items, linktreeUrl }: Props) {
           )}
         </div>
         <ul className="nav-links">
-          {items?.map(({ label, url, external, cta }) => {
+          {items?.map(({ label, url, external, cta }, idx) => {
             if (!url) return null;
             return (
-              <li key={url}>
+              <li key={`${url}-${idx}`}>
                 {external ? (
                   <a href={url} target="_blank" rel="noreferrer" className={pathname === url ? 'active' : ''}>{label}</a>
                 ) : cta ? (
@@ -82,12 +82,12 @@ export default function Nav({ items, linktreeUrl }: Props) {
 
       <div id="mobile-menu" className={menuOpen ? 'open' : ''}>
         <button className="mm-close" onClick={close}>✕</button>
-        {items?.map(({ label, url, external }) => {
+        {items?.map(({ label, url, external }, idx) => {
           if (!url) return null;
           return external ? (
-            <a key={url} href={url} onClick={close}>{label}</a>
+            <a key={`${url}-${idx}`} href={url} onClick={close}>{label}</a>
           ) : (
-            <Link key={url} href={url} onClick={close}>{label}</Link>
+            <Link key={`${url}-${idx}`} href={url} onClick={close}>{label}</Link>
           );
         })}
       </div>

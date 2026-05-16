@@ -13,29 +13,37 @@ export default async function MainLayout({ children }: { children: React.ReactNo
     detectInitialCurrency(),
   ]);
 
-  const navItems = navData?.navItems ?? [
-    { label: 'Music', url: '/music', external: false, cta: false },
-    { label: 'About', url: '/about', external: false, cta: false },
-    { label: 'Tour', url: '/tour', external: false, cta: false },
-    { label: 'Podcast', url: '/podcast', external: false, cta: false },
-    { label: 'Journal', url: '/blog', external: false, cta: false },
-    { label: 'Merch', url: '/merch', external: false, cta: true },
-    { label: 'Media', url: '/media', external: false, cta: false },
-    { label: 'Booking', url: '/contact', external: false, cta: false },
+  const FALLBACK_NAV = [
+    { label: 'Music', url: '/music', external: false, cta: false, locations: ['header'] },
+    { label: 'About', url: '/about', external: false, cta: false, locations: ['header'] },
+    { label: 'Tour', url: '/tour', external: false, cta: false, locations: ['header'] },
+    { label: 'Podcast', url: '/podcast', external: false, cta: false, locations: ['header'] },
+    { label: 'Journal', url: '/blog', external: false, cta: false, locations: ['header'] },
+    { label: 'Merch', url: '/merch', external: false, cta: true, locations: ['header'] },
+    { label: 'Media', url: '/media', external: false, cta: false, locations: ['header'] },
+    { label: 'Booking', url: '/contact', external: false, cta: false, locations: ['header'] },
   ];
 
-  console.log(navData?.navItems)
+  const allNavItems = navData?.navItems ?? FALLBACK_NAV;
+  // Items with no `locations` set (legacy data) are treated as header items so existing
+  // pre-migration data keeps rendering on the nav. Items explicitly tagged 'footer' only
+  // are excluded from the header.
+  const headerItems = allNavItems.filter((item) => {
+    const locations = (item as { locations?: string[] | null }).locations;
+    return !locations || locations.length === 0 || locations.includes('header');
+  });
 
   return (
     <Providers initialCurrency={initialCurrency}>
       <header className="site-header">
         <AnnounceBar />
-        <Nav items={navItems} linktreeUrl={artist?.socialLinks?.linktree} />
+        <Nav items={headerItems} linktreeUrl={artist?.socialLinks?.linktree} />
       </header>
       {children}
       <Footer
         socialLinks={artist?.socialLinks}
         footerText={undefined}
+        navItems={allNavItems}
       />
       <CartDrawer />
     </Providers>
