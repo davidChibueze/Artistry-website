@@ -153,7 +153,7 @@ export default async function HomePage() {
               <Link href="/merch" className="btn btn-outline btn-sm">All Merch →</Link>
             </div>
             <MarqueeCarousel itemWidth={320} gap={28} duration={50}>
-              {merchProducts.map((product) => (
+              {merchProducts.filter(m => m.featured).map((product) => (
                 <MerchProductCard key={product.id} product={product} />
               ))}
             </MarqueeCarousel>

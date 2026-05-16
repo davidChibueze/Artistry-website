@@ -1,8 +1,11 @@
 .row {
+  position: absolute;
+  top: calc(var(--nav-h) + 20px);
+  right: 48px;
+  z-index: 3;
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-top: 28px;
 }
 
 .defs {
@@ -102,9 +105,20 @@
   transform: translate(1.5px, 1.5px);
 }
 
+@media (max-width: 900px) {
+  .row {
+    right: 24px;
+    gap: 10px;
+  }
+}
+
 @media (max-width: 560px) {
+  .row {
+    top: calc(var(--nav-h) + 12px);
+    gap: 8px;
+  }
   .link {
-    --hs-size: 38px;
+    --hs-size: 36px;
   }
   .icon,
   .tiktokStack,
