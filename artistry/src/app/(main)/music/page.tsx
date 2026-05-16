@@ -94,13 +94,12 @@ export default async function MusicPage() {
           <div className="releases-grid">
             {releases.map((release) => {
               const streamHref = release.streamUrl ?? null;
+              const detailHref = `/music/${release.slug}`;
               const hasBuy = (release.distributionTiers?.length ?? 0) > 0;
               return (
                 <div key={release.id} className="release-card">
-                  <a
-                    href={streamHref || '/subscribe'}
-                    target={streamHref ? '_blank' : undefined}
-                    rel={streamHref ? 'noopener noreferrer' : undefined}
+                  <Link
+                    href={detailHref}
                     className="release-art img-placeholder"
                     style={{
                       backgroundImage: getMediaUrl(release.coverImage) ? `url('${getMediaUrl(release.coverImage)}')` : undefined,
@@ -110,10 +109,13 @@ export default async function MusicPage() {
                       display: 'block',
                       textDecoration: 'none',
                     }}
+                    aria-label={`Open ${release.title}`}
                   />
                   <div className="release-body">
                     <div className="release-meta">{release.type} · {formatDate(release.releaseDate)} · {release.tracks?.length || 0} Tracks</div>
-                    <div className="release-name">{release.title}</div>
+                    <Link href={detailHref} className="release-name" style={{ color: 'inherit', textDecoration: 'none' }}>
+                      {release.title}
+                    </Link>
                     <div className="release-desc">{release.description}</div>
                     {release.featured && (
                       <div className="release-tags">
@@ -136,13 +138,13 @@ export default async function MusicPage() {
                         </a>
                       )}
                       {hasBuy && (
-                        <Link href="/subscribe" className={`${styles.releasePlatformBtn} ${styles.releaseBuyBtn}`}>
+                        <Link href={detailHref} className={`${styles.releasePlatformBtn} ${styles.releaseBuyBtn}`}>
                           Buy · {formatMoney(priceFor(release.distributionTiers![0], currency), currency)}
                         </Link>
                       )}
                       {!streamHref && !hasBuy && (
-                        <Link href="/subscribe" className={`${styles.releasePlatformBtn} ${styles.releaseBuyBtn}`}>
-                          Stream Exclusive
+                        <Link href={detailHref} className={`${styles.releasePlatformBtn} ${styles.releaseBuyBtn}`}>
+                          View Details
                         </Link>
                       )}
                     </div>

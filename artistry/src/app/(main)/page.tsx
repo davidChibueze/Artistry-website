@@ -114,7 +114,7 @@ export default async function HomePage() {
           </div>
           <MarqueeCarousel itemWidth={360} gap={24} duration={45}>
             {releases.map((release) => (
-              <Link key={release.id} href="/music" className="feat-card">
+              <Link key={release.id} href={`/music/${release.slug}`} className="feat-card">
                 <div
                   className="feat-img img-placeholder"
                   style={{
