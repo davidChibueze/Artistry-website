@@ -1,4 +1,4 @@
-import 'dotenv/config'
+import './loadEnv'
 import { getPayload } from 'payload'
 
 import config from '../src/payload.config'

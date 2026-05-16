@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import MusicPlayer from '../../_components/MusicPlayer';
+import ReleaseDescription from '../../_components/ReleaseDescription';
 import { getReleases, getSiteSettings, getMediaUrl } from '@/lib/api';
 import { detectInitialCurrency } from '@/lib/currency-detect';
 import { formatMoney, priceFor } from '@/lib/money';
@@ -116,7 +117,14 @@ export default async function MusicPage() {
                     <Link href={detailHref} className="release-name" style={{ color: 'inherit', textDecoration: 'none' }}>
                       {release.title}
                     </Link>
-                    <div className="release-desc">{release.description}</div>
+                    {release.description && (
+                      <ReleaseDescription
+                        title={release.title}
+                        releaseType={release.type}
+                        description={release.description}
+                        className="release-desc"
+                      />
+                    )}
                     {release.featured && (
                       <div className="release-tags">
                         <span className="badge badge-gold">Latest</span>

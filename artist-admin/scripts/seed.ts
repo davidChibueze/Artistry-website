@@ -1,4 +1,4 @@
-import 'dotenv/config'
+import './loadEnv'
 import { getPayload, type Payload } from 'payload'
 import config from '../src/payload.config'
 
@@ -421,6 +421,49 @@ export async function seed(payloadInstance?: Payload) {
       }
     } else {
       console.log('Merch products already exist, skipping.')
+    }
+
+    // Navigation (skip if already seeded)
+    console.log('Seeding navigation…')
+    const existingNav = await payload.findGlobal({
+      slug: 'navigation',
+      overrideAccess: true,
+    })
+    if (!existingNav?.navItems?.length) {
+      const navItems = [
+        // Header items
+        { label: 'Music', url: '/music', locations: ['header'], external: false, cta: false },
+        { label: 'About', url: '/about', locations: ['header'], external: false, cta: false },
+        { label: 'Tour', url: '/tour', locations: ['header'], external: false, cta: false },
+        { label: 'Podcast', url: '/podcast', locations: ['header'], external: false, cta: false },
+        { label: 'Journal', url: '/blog', locations: ['header'], external: false, cta: false },
+        { label: 'Media', url: '/media', locations: ['header'], external: false, cta: false },
+        { label: 'Booking', url: '/contact', locations: ['header'], external: false, cta: false },
+        { label: 'Merch', url: '/merch', locations: ['header'], external: false, cta: true },
+
+        // Footer items — grouped by footerColumn
+        { label: 'The Switch EP', url: '/music', locations: ['footer'], footerColumn: 'Music', external: false, cta: false },
+        { label: 'All Releases', url: '/music', locations: ['footer'], footerColumn: 'Music', external: false, cta: false },
+        { label: 'Stream Exclusive', url: '/subscribe', locations: ['footer'], footerColumn: 'Music', external: false, cta: false },
+
+        { label: 'About', url: '/about', locations: ['footer'], footerColumn: 'Artist', external: false, cta: false },
+        { label: 'Tour Dates', url: '/tour', locations: ['footer'], footerColumn: 'Artist', external: false, cta: false },
+        { label: 'Podcast', url: '/podcast', locations: ['footer'], footerColumn: 'Artist', external: false, cta: false },
+        { label: 'Journal', url: '/blog', locations: ['footer'], footerColumn: 'Artist', external: false, cta: false },
+
+        { label: 'Merch', url: '/merch', locations: ['footer'], footerColumn: 'Connect', external: false, cta: false },
+        { label: 'Press Kit', url: '/media', locations: ['footer'], footerColumn: 'Connect', external: false, cta: false },
+        { label: 'Booking', url: '/contact', locations: ['footer'], footerColumn: 'Connect', external: false, cta: false },
+        { label: 'Newsletter', url: '/subscribe', locations: ['footer'], footerColumn: 'Connect', external: false, cta: false },
+      ]
+
+      await payload.updateGlobal({
+        slug: 'navigation',
+        data: { navItems } as Parameters<typeof payload.updateGlobal<'navigation'>>[0]['data'],
+        overrideAccess: true,
+      })
+    } else {
+      console.log('Navigation already populated, skipping.')
     }
 
     console.log('Seeding complete!')
