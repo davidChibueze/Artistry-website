@@ -1513,6 +1513,7 @@ export interface SiteSetting {
     startDate?: string | null;
     endDate?: string | null;
   };
+  heroRelease?: (number | null) | Release;
   epReleaseDate?: string | null;
   cdnUrl?: string | null;
   footerText?: string | null;
@@ -1566,6 +1567,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         startDate?: T;
         endDate?: T;
       };
+  heroRelease?: T;
   epReleaseDate?: T;
   cdnUrl?: T;
   footerText?: T;
