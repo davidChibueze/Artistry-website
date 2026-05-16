@@ -53,6 +53,15 @@ export const SiteSettings: GlobalConfig = {
       ],
     },
     {
+      name: 'heroRelease',
+      type: 'relationship',
+      relationTo: 'releases',
+      admin: {
+        description:
+          'The release shown in the "Latest Release" section on /music. Leave empty to auto-select the first featured release, or the most recent release.',
+      },
+    },
+    {
       name: 'epReleaseDate',
       type: 'date',
     },

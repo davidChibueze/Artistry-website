@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import MusicPlayer from '../../_components/MusicPlayer';
-import { getReleases, getMediaUrl } from '@/lib/api';
+import { getReleases, getSiteSettings, getMediaUrl } from '@/lib/api';
 import { detectInitialCurrency } from '@/lib/currency-detect';
 import { formatMoney, priceFor } from '@/lib/money';
 import styles from './page.module.css';
@@ -19,10 +19,16 @@ function formatDate(dateStr?: string | null) {
 }
 
 export default async function MusicPage() {
-  const releasesRes = await getReleases().catch(() => ({ docs: [], totalDocs: 0 }));
+  const [releasesRes, settings] = await Promise.all([
+    getReleases().catch(() => ({ docs: [], totalDocs: 0 })),
+    getSiteSettings().catch(() => null),
+  ]);
   const currency = await detectInitialCurrency();
   const releases = releasesRes.docs;
-  const featured = releases.find(r => r.featured) ?? releases[0];
+  const heroId = typeof settings?.heroRelease === 'number' ? settings.heroRelease : (settings?.heroRelease as { id?: number })?.id;
+  const featured = heroId
+    ? releases.find(r => r.id === heroId) ?? releases.find(r => r.featured) ?? releases[0]
+    : releases.find(r => r.featured) ?? releases[0];
 
   const cmsTracks = featured?.tracks?.map(t => ({
     id: t.id,
