@@ -72,7 +72,7 @@ export default function DistributionModal({
   const handleCheckout = async () => {
     if (!selectedTier || selectedTier.price == null) return;
     const amount = Math.round(selectedTier.price * 100);
-    const currency = selectedTier.currency || 'USD';
+    const currency = selectedTier.currency || 'NGN';
     const reference = `PB-${Date.now()}`;
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 

@@ -14,3 +14,54 @@
   color: var(--gold);
   border-color: rgba(212, 160, 60, 0.25);
 }
+
+.releasePlatforms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.releasePlatformBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: transparent;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+
+.releasePlatformBtn:hover {
+  color: var(--text);
+  border-color: rgba(240, 232, 220, 0.3);
+  background: rgba(240, 232, 220, 0.04);
+}
+
+.releasePlatformDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.releaseBuyBtn {
+  color: var(--gold);
+  border-color: rgba(212, 160, 60, 0.3);
+}
+
+.releaseBuyBtn:hover {
+  background: rgba(212, 160, 60, 0.08);
+  border-color: rgba(212, 160, 60, 0.5);
+  color: var(--gold);
+}

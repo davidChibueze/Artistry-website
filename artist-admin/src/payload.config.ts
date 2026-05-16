@@ -31,6 +31,7 @@ import { cartEndpoints } from './endpoints/cart/handlers'
 import { credoCheckout } from './endpoints/checkout/credo'
 import { paypalCheckoutCapture, paypalCheckoutCreate } from './endpoints/checkout/paypal'
 import { credoCallback } from './endpoints/credo/callback'
+import { credoInitialize } from './endpoints/credo/initialize'
 import { credoWebhook } from './endpoints/credo/webhook'
 import { emailBroadcast } from './endpoints/email/broadcast'
 import { orderEndpoints } from './endpoints/orders/handlers'
@@ -129,7 +130,11 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  cors: [process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'].filter(Boolean),
+  cors: [
+    process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
+    process.env.FRONTEND_URL,
+    'http://localhost:3002',
+  ].filter(Boolean) as string[],
   plugins: [
     loggingPlugin,
     s3Storage({
