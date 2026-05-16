@@ -7,9 +7,17 @@ interface SocialLinks {
   soundcloud?: string | null;
 }
 
+interface NavItem {
+  label?: string | null;
+  url?: string | null;
+  external?: boolean | null;
+  locations?: string[] | null;
+}
+
 interface Props {
   socialLinks?: SocialLinks | null;
   footerText?: string | null;
+  navItems?: NavItem[] | null;
 }
 
 export default function Footer({ socialLinks, footerText }: Props) {
@@ -48,7 +56,7 @@ export default function Footer({ socialLinks, footerText }: Props) {
         </div>
       </div>
       <div className="footer-bottom">
-        <p>{footerText || '\u00A9 2025 Poshbugati \u00B7 All rights reserved'}</p>
+        <p>{footerText || '© 2025 Poshbugati · All rights reserved'}</p>
         <div className="footer-socials">
           {socialLinks?.instagram && (
             <a href={socialLinks.instagram} aria-label="Instagram" target="_blank" rel="noreferrer">
