@@ -73,7 +73,7 @@ export default async function MusicPage() {
                   </p>
                   <div className="ep-featured-actions">
                     <Link href="/subscribe" className="btn btn-gold">Stream Exclusive</Link>
-                    <Link href="/music" className="btn btn-outline">Full EP Details</Link>
+                    <Link href={`/music/${featured.slug}`} className="btn btn-outline">Full EP Details</Link>
                   </div>
                   <MusicPlayer
                     releaseId={featured.id}

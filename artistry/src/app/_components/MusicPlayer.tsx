@@ -100,9 +100,11 @@ export default function MusicPlayer({
 
   useEffect(() => {
     if (progress >= PREVIEW_LIMIT && isPlaying) {
+      const track = currentTrack;
       stopPreview();
+      if (track) setModalTrack(track);
     }
-  }, [progress, isPlaying, stopPreview]);
+  }, [progress, isPlaying, stopPreview, currentTrack]);
 
   useEffect(() => () => { audioRef.current?.pause(); }, []);
 
