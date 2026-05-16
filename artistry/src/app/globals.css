@@ -51,12 +51,15 @@ body {
   height: var(--nav-h);
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 48px;
-  transition: background 0.4s, backdrop-filter 0.4s;
+  background: transparent;
+  backdrop-filter: none;
+  border-bottom: 1px solid transparent;
+  transition: background 0.4s, backdrop-filter 0.4s, border-color 0.4s;
 }
 #nav.scrolled {
   background: rgba(14,11,9,0.94);
   backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border);
+  border-bottom-color: var(--border);
 }
 .nav-brand {
   display: flex; align-items: center; gap: 12px;
@@ -404,7 +407,7 @@ body {
   box-shadow: 0 0 0 rgba(0,0,0,0);
 }
 .feat-card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-6px) scale(1.04);
   border-color: rgba(212,160,60,0.45);
   box-shadow: 0 18px 28px -16px rgba(212,160,60,0.55), 0 30px 60px -28px rgba(212,160,60,0.35);
 }
@@ -562,7 +565,7 @@ body {
   box-shadow: 0 0 0 rgba(0,0,0,0);
 }
 .release-card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-6px) scale(1.04);
   border-color: rgba(212,160,60,0.45);
   box-shadow: 0 18px 28px -16px rgba(212,160,60,0.55), 0 30px 60px -28px rgba(212,160,60,0.35);
 }
@@ -907,7 +910,7 @@ body {
   box-shadow: 0 0 0 rgba(0,0,0,0);
 }
 .product-card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-6px) scale(1.04);
   border-color: rgba(212,160,60,0.45);
   box-shadow: 0 18px 28px -16px rgba(212,160,60,0.55), 0 30px 60px -28px rgba(212,160,60,0.35);
 }

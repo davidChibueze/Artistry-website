@@ -1,8 +1,11 @@
 .viewport {
   position: relative;
   width: 100%;
-  overflow: hidden;
+  /* Clip horizontally only — cards expand vertically on hover and must not be cropped. */
+  overflow-x: clip;
+  overflow-y: visible;
   margin-top: 56px;
+  padding: 32px 0 40px;
   /* Bleed slightly past the section padding so the fade lands on the gutters. */
   --mc-fade-w: 140px;
 }
@@ -10,8 +13,8 @@
 .fadeLeft,
 .fadeRight {
   position: absolute;
-  top: 0;
-  bottom: 0;
+  top: 32px;
+  bottom: 40px;
   width: var(--mc-fade-w);
   z-index: 3;
   pointer-events: none;
@@ -31,9 +34,6 @@
   display: flex;
   width: max-content;
   animation: mc-marquee var(--mc-duration, 40s) linear infinite;
-  /* Some breathing room so glow shadows aren't clipped vertically. */
-  padding: 24px 0 32px;
-  margin: -24px 0 -32px;
 }
 
 .set {
