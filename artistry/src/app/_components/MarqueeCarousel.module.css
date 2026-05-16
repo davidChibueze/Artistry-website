@@ -1,0 +1,92 @@
+.viewport {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  margin-top: 56px;
+  /* Bleed slightly past the section padding so the fade lands on the gutters. */
+  --mc-fade-w: 140px;
+}
+
+.fadeLeft,
+.fadeRight {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--mc-fade-w);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.fadeLeft {
+  left: 0;
+  background: linear-gradient(to right, var(--bg) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+.fadeRight {
+  right: 0;
+  background: linear-gradient(to left, var(--bg) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: mc-marquee var(--mc-duration, 40s) linear infinite;
+  /* Some breathing room so glow shadows aren't clipped vertically. */
+  padding: 24px 0 32px;
+  margin: -24px 0 -32px;
+}
+
+.set {
+  display: flex;
+  gap: var(--mc-gap, 24px);
+  flex-shrink: 0;
+  padding-right: var(--mc-gap, 24px);
+}
+
+.item {
+  width: var(--mc-item-w, 340px);
+  flex-shrink: 0;
+  display: flex;
+}
+
+/* Each item's direct child should fill the slot. */
+.item > * {
+  width: 100%;
+}
+
+@keyframes mc-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+  }
+  .viewport {
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+}
+
+@media (max-width: 900px) {
+  .viewport {
+    --mc-fade-w: 60px;
+  }
+  .item {
+    width: 280px;
+  }
+}
+
+@media (max-width: 560px) {
+  .viewport {
+    --mc-fade-w: 40px;
+  }
+  .item {
+    width: 240px;
+  }
+}

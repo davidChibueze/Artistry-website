@@ -1,0 +1,115 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.link {
+  --hs-size: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--hs-size);
+  height: var(--hs-size);
+  border-radius: 50%;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  text-decoration: none;
+}
+
+.link:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  transition: fill 0.25s ease;
+}
+
+.icon path {
+  transition: fill 0.25s ease;
+}
+
+/* Solid-brand hovers: just swap the icon color. */
+.link_youtube:hover {
+  color: #ff0000;
+}
+.link_soundcloud:hover {
+  color: #ff5500;
+}
+.link_linktree:hover {
+  color: #43e660;
+}
+
+/* Instagram: gradient swap on the path fill (overrides currentColor). */
+.link_instagram:hover .icon path {
+  fill: url(#hero-ig-grad);
+}
+
+/* TikTok: 3-layer offset look. Default = only white visible. */
+.tiktokStack {
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+}
+
+.tiktokLayer {
+  position: absolute;
+  inset: 0;
+  width: 20px;
+  height: 20px;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.tiktokCyan {
+  color: #25f4ee;
+  opacity: 0;
+  transform: translate(0, 0);
+}
+
+.tiktokMagenta {
+  color: #fe2c55;
+  opacity: 0;
+  transform: translate(0, 0);
+}
+
+.tiktokWhite {
+  color: #ffffff;
+  opacity: 1;
+}
+
+.link_tiktok:hover .tiktokCyan {
+  opacity: 1;
+  transform: translate(-1.5px, -1.5px);
+}
+
+.link_tiktok:hover .tiktokMagenta {
+  opacity: 1;
+  transform: translate(1.5px, 1.5px);
+}
+
+@media (max-width: 560px) {
+  .link {
+    --hs-size: 38px;
+  }
+  .icon,
+  .tiktokStack,
+  .tiktokLayer {
+    width: 18px;
+    height: 18px;
+  }
+}

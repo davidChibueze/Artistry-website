@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import MusicPlayer from '../../_components/MusicPlayer';
+import MarqueeCarousel from '../../_components/MarqueeCarousel';
 import { getReleases, getMediaUrl } from '@/lib/api';
 import { detectInitialCurrency } from '@/lib/currency-detect';
 import { formatMoney, priceFor } from '@/lib/money';
@@ -85,7 +86,7 @@ export default async function MusicPage() {
 
           <div className="section-label">All Releases</div>
           <h2 className="section-title">Discography</h2>
-          <div className="releases-grid">
+          <MarqueeCarousel itemWidth={340} gap={28} duration={55}>
             {releases.map((release) => {
               const streamHref = release.streamUrl ?? null;
               const hasBuy = (release.distributionTiers?.length ?? 0) > 0;
@@ -144,7 +145,7 @@ export default async function MusicPage() {
                 </div>
               );
             })}
-          </div>
+          </MarqueeCarousel>
 
           <div className={styles.platformsWrap}>
             <div className="section-label">Stream & Save</div>
