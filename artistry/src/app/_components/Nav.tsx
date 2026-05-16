@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
+import NavCartButton from './NavCartButton';
 
 interface NavItem {
   label?: string | null;
@@ -69,6 +70,7 @@ export default function Nav({ items, linktreeUrl }: Props) {
             );
           })}
         </ul>
+        <NavCartButton />
         <button
           className="nav-hamburger"
           aria-label="Open menu"

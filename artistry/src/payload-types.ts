@@ -78,6 +78,9 @@ export interface Config {
     subscriptions: Subscription;
     'contact-submissions': ContactSubmission;
     orders: Order;
+    carts: Cart;
+    'email-templates': EmailTemplate;
+    'email-logs': EmailLog;
     media: Media;
     users: User;
     'payload-kv': PayloadKv;
@@ -98,6 +101,9 @@ export interface Config {
     subscriptions: SubscriptionsSelect<false> | SubscriptionsSelect<true>;
     'contact-submissions': ContactSubmissionsSelect<false> | ContactSubmissionsSelect<true>;
     orders: OrdersSelect<false> | OrdersSelect<true>;
+    carts: CartsSelect<false> | CartsSelect<true>;
+    'email-templates': EmailTemplatesSelect<false> | EmailTemplatesSelect<true>;
+    'email-logs': EmailLogsSelect<false> | EmailLogsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -213,6 +219,9 @@ export interface ArtistProfile {
     tiktok?: string | null;
     youtube?: string | null;
     soundcloud?: string | null;
+    /**
+     * Public Linktree URL — shown as a pill next to the logo on every page.
+     */
     linktree?: string | null;
   };
   contactEmails?: {
@@ -232,6 +241,7 @@ export interface Media {
   alt?: string | null;
   caption?: string | null;
   category?: ('Release Cover' | 'Press Photo' | 'Merch' | 'Blog' | 'Artist' | 'Other') | null;
+  prefix?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -292,6 +302,14 @@ export interface Release {
         badge?: string | null;
         previewUrl?: string | null;
         audioFile?: (number | null) | Media;
+        /**
+         * Per-track USD price. Leave blank if not individually sold.
+         */
+        priceUSD?: number | null;
+        /**
+         * Per-track NGN price.
+         */
+        priceNGN?: number | null;
         id?: string | null;
       }[]
     | null;
@@ -308,8 +326,8 @@ export interface Release {
     | {
         label?: string | null;
         description?: string | null;
-        price?: number | null;
-        currency?: ('USD' | 'EUR' | 'GBP') | null;
+        priceUSD: number;
+        priceNGN: number;
         id?: string | null;
       }[]
     | null;
@@ -437,8 +455,22 @@ export interface MerchProduct {
       }[]
     | null;
   category?: ('Apparel' | 'Music' | 'Digital' | 'Bundle' | 'Accessory') | null;
-  price: number;
-  compareAtPrice?: number | null;
+  /**
+   * Default USD price. Charged to PayPal customers and shown to non-NG visitors.
+   */
+  priceUSD: number;
+  /**
+   * Default NGN price. Charged to Credo customers and shown to NG visitors.
+   */
+  priceNGN: number;
+  /**
+   * Original USD price for strike-through display. Leave blank if not on sale.
+   */
+  compareAtPriceUSD?: number | null;
+  /**
+   * Original NGN price for strike-through display.
+   */
+  compareAtPriceNGN?: number | null;
   description?: {
     root: {
       type: string;
@@ -454,18 +486,45 @@ export interface MerchProduct {
     };
     [k: string]: unknown;
   } | null;
-  variants?:
+  /**
+   * Define the axes of variation (e.g. Size, Color). Each variant below must specify a value for every option type.
+   */
+  optionTypes?:
     | {
-        name?: string | null;
-        options?:
+        name: string;
+        values?:
           | {
-              option?: string | null;
+              value: string;
               id?: string | null;
             }[]
           | null;
         id?: string | null;
       }[]
     | null;
+  /**
+   * Each row is a sellable SKU. Provide a value for every option type defined above.
+   */
+  variants?:
+    | {
+        optionValues?:
+          | {
+              type: string;
+              value: string;
+              id?: string | null;
+            }[]
+          | null;
+        sku: string;
+        priceUSD: number;
+        priceNGN: number;
+        stock: number;
+        image?: (number | null) | Media;
+        available?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Manual override. When unchecked, the product is hidden from the storefront regardless of variant stock.
+   */
   inStock?: boolean | null;
   badge?: string | null;
   featured?: boolean | null;
@@ -548,31 +607,222 @@ export interface Order {
   orderNumber?: string | null;
   customerEmail: string;
   customerName?: string | null;
+  /**
+   * Required for physical goods. Leave empty for digital-only orders.
+   */
+  shippingAddress?: {
+    line1?: string | null;
+    line2?: string | null;
+    city?: string | null;
+    state?: string | null;
+    postalCode?: string | null;
+    country?: string | null;
+    phone?: string | null;
+  };
   items?:
     | {
         type?: ('Track' | 'EP' | 'Merch') | null;
+        /**
+         * Source merch-products or releases doc ID at the time of purchase.
+         */
+        productId?: string | null;
+        /**
+         * For merch with variants, the chosen variant array row ID.
+         */
+        variantId?: string | null;
         name?: string | null;
-        price?: number | null;
+        /**
+         * Human-readable variant description, e.g. "Size: M / Color: Black".
+         */
+        variantLabel?: string | null;
+        sku?: string | null;
+        priceUSD: number;
+        priceNGN: number;
         quantity?: number | null;
         id?: string | null;
       }[]
     | null;
-  total: number;
-  currency?: string | null;
-  status?: ('Pending Payment' | 'Complete' | 'Refunded' | 'Expired') | null;
   /**
-   * Credo's internal transaction reference (transRef) used for verification
+   * Sum of line items in displayCurrency, before shipping/tax.
+   */
+  subtotal: number;
+  shipping?: number | null;
+  total: number;
+  /**
+   * Currency the customer saw at checkout. subtotal/shipping/total are in this currency.
+   */
+  displayCurrency: 'USD' | 'NGN';
+  status?: ('Pending Payment' | 'Paid' | 'Fulfilled' | 'Shipped' | 'Refunded' | 'Cancelled' | 'Expired') | null;
+  paymentProvider?: ('credo' | 'paypal') | null;
+  /**
+   * Currency the payment was actually captured in.
+   */
+  paidCurrency?: ('USD' | 'NGN') | null;
+  /**
+   * Amount actually captured in paidCurrency.
+   */
+  paidAmount?: number | null;
+  /**
+   * Credo transRef used for verification.
    */
   credoReference?: string | null;
   /**
-   * URL to redirect the customer to complete payment
+   * URL to redirect the customer to complete a Credo payment.
    */
   credoAuthorizationUrl?: string | null;
+  /**
+   * PayPal Orders v2 order ID returned by createOrder.
+   */
+  paypalOrderId?: string | null;
+  /**
+   * PayPal capture ID returned by captureOrder.
+   */
+  paypalCaptureId?: string | null;
+  /**
+   * Unguessable token for self-service order status lookup.
+   */
+  lookupToken?: string | null;
+  /**
+   * Per-browser identifier copied from the cart cookie. Used to build per-browser order history without auth.
+   */
+  customerToken?: string | null;
   downloadToken?: string | null;
   downloadExpiresAt?: string | null;
   downloadCount?: number | null;
+  /**
+   * Idempotency record of transactional emails fired for this order.
+   */
+  emailsSent?:
+    | {
+        templateKey?: string | null;
+        sentAt?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Internal notes. Not shown to the customer.
+   */
+  notes?: string | null;
   createdAt: string;
   updatedAt: string;
+}
+/**
+ * Anonymous shopping carts. Read/write happens through public cart endpoints authorized by the cart_id cookie — never directly via admin UI.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "carts".
+ */
+export interface Cart {
+  id: number;
+  cartId: string;
+  customerEmail?: string | null;
+  /**
+   * Long-lived per-browser identifier. Copied into Orders.customerToken at checkout.
+   */
+  customerToken?: string | null;
+  displayCurrency: 'USD' | 'NGN';
+  items?:
+    | {
+        type?: ('Track' | 'EP' | 'Merch') | null;
+        productId: string;
+        variantId?: string | null;
+        name?: string | null;
+        variantLabel?: string | null;
+        sku?: string | null;
+        priceUSD: number;
+        priceNGN: number;
+        quantity?: number | null;
+        imageUrl?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  itemCount?: number | null;
+  lastActivityAt?: string | null;
+  abandonedEmailSentAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Subject and body content for every transactional email sent by the site. Use {{variableName}} placeholders — the substitution map for each key is documented below.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "email-templates".
+ */
+export interface EmailTemplate {
+  id: number;
+  /**
+   * Identifies which system event triggers this template.
+   */
+  key:
+    | 'order.paid'
+    | 'order.fulfilled'
+    | 'order.shipped'
+    | 'order.refunded'
+    | 'order.cancelled'
+    | 'order.magic-link'
+    | 'cart.abandoned'
+    | 'welcome.newsletter'
+    | 'contact.auto-reply';
+  /**
+   * Uncheck to disable sends for this template without deleting it.
+   */
+  enabled?: boolean | null;
+  /**
+   * Email subject line. Supports {{variables}}.
+   */
+  subject: string;
+  /**
+   * Email body. Supports {{variables}} anywhere in the rich text.
+   */
+  body: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Defaults to the site sender if blank.
+   */
+  fromName?: string | null;
+  /**
+   * Must be a verified Resend sender domain.
+   */
+  fromEmail?: string | null;
+  replyTo?: string | null;
+  /**
+   * Reference list of variables available for the selected key. Auto-updated when you save the template.
+   */
+  variableDocs?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Record of every transactional email send. Read-only — populated by sendTemplated().
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "email-logs".
+ */
+export interface EmailLog {
+  id: number;
+  templateKey: string;
+  to: string;
+  subject?: string | null;
+  status: 'queued' | 'sent' | 'failed';
+  resendId?: string | null;
+  order?: (number | null) | Order;
+  error?: string | null;
+  sentAt: string;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -670,6 +920,18 @@ export interface PayloadLockedDocument {
         value: number | Order;
       } | null)
     | ({
+        relationTo: 'carts';
+        value: number | Cart;
+      } | null)
+    | ({
+        relationTo: 'email-templates';
+        value: number | EmailTemplate;
+      } | null)
+    | ({
+        relationTo: 'email-logs';
+        value: number | EmailLog;
+      } | null)
+    | ({
         relationTo: 'media';
         value: number | Media;
       } | null)
@@ -760,6 +1022,7 @@ export interface ArtistProfileSelect<T extends boolean = true> {
         tiktok?: T;
         youtube?: T;
         soundcloud?: T;
+        linktree?: T;
       };
   contactEmails?:
     | T
@@ -793,6 +1056,8 @@ export interface ReleasesSelect<T extends boolean = true> {
         badge?: T;
         previewUrl?: T;
         audioFile?: T;
+        priceUSD?: T;
+        priceNGN?: T;
         id?: T;
       };
   streamingLinks?:
@@ -807,8 +1072,8 @@ export interface ReleasesSelect<T extends boolean = true> {
     | {
         label?: T;
         description?: T;
-        price?: T;
-        currency?: T;
+        priceUSD?: T;
+        priceNGN?: T;
         id?: T;
       };
   updatedAt?: T;
@@ -899,19 +1164,39 @@ export interface MerchProductsSelect<T extends boolean = true> {
         id?: T;
       };
   category?: T;
-  price?: T;
-  compareAtPrice?: T;
+  priceUSD?: T;
+  priceNGN?: T;
+  compareAtPriceUSD?: T;
+  compareAtPriceNGN?: T;
   description?: T;
-  variants?:
+  optionTypes?:
     | T
     | {
         name?: T;
-        options?:
+        values?:
           | T
           | {
-              option?: T;
+              value?: T;
               id?: T;
             };
+        id?: T;
+      };
+  variants?:
+    | T
+    | {
+        optionValues?:
+          | T
+          | {
+              type?: T;
+              value?: T;
+              id?: T;
+            };
+        sku?: T;
+        priceUSD?: T;
+        priceNGN?: T;
+        stock?: T;
+        image?: T;
+        available?: T;
         id?: T;
       };
   inStock?: T;
@@ -978,25 +1263,120 @@ export interface OrdersSelect<T extends boolean = true> {
   orderNumber?: T;
   customerEmail?: T;
   customerName?: T;
+  shippingAddress?:
+    | T
+    | {
+        line1?: T;
+        line2?: T;
+        city?: T;
+        state?: T;
+        postalCode?: T;
+        country?: T;
+        phone?: T;
+      };
   items?:
     | T
     | {
         type?: T;
+        productId?: T;
+        variantId?: T;
         name?: T;
-        price?: T;
+        variantLabel?: T;
+        sku?: T;
+        priceUSD?: T;
+        priceNGN?: T;
         quantity?: T;
         id?: T;
       };
+  subtotal?: T;
+  shipping?: T;
   total?: T;
-  currency?: T;
+  displayCurrency?: T;
   status?: T;
+  paymentProvider?: T;
+  paidCurrency?: T;
+  paidAmount?: T;
   credoReference?: T;
   credoAuthorizationUrl?: T;
+  paypalOrderId?: T;
+  paypalCaptureId?: T;
+  lookupToken?: T;
+  customerToken?: T;
   downloadToken?: T;
   downloadExpiresAt?: T;
   downloadCount?: T;
+  emailsSent?:
+    | T
+    | {
+        templateKey?: T;
+        sentAt?: T;
+        id?: T;
+      };
+  notes?: T;
   createdAt?: T;
   updatedAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "carts_select".
+ */
+export interface CartsSelect<T extends boolean = true> {
+  cartId?: T;
+  customerEmail?: T;
+  customerToken?: T;
+  displayCurrency?: T;
+  items?:
+    | T
+    | {
+        type?: T;
+        productId?: T;
+        variantId?: T;
+        name?: T;
+        variantLabel?: T;
+        sku?: T;
+        priceUSD?: T;
+        priceNGN?: T;
+        quantity?: T;
+        imageUrl?: T;
+        id?: T;
+      };
+  itemCount?: T;
+  lastActivityAt?: T;
+  abandonedEmailSentAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "email-templates_select".
+ */
+export interface EmailTemplatesSelect<T extends boolean = true> {
+  key?: T;
+  enabled?: T;
+  subject?: T;
+  body?: T;
+  fromName?: T;
+  fromEmail?: T;
+  replyTo?: T;
+  variableDocs?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "email-logs_select".
+ */
+export interface EmailLogsSelect<T extends boolean = true> {
+  templateKey?: T;
+  to?: T;
+  subject?: T;
+  status?: T;
+  resendId?: T;
+  order?: T;
+  error?: T;
+  sentAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1006,6 +1386,7 @@ export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
   category?: T;
+  prefix?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;

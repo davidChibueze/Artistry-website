@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { Globe, Package, RotateCcw, Zap } from 'lucide-react';
 import { getMediaUrl } from '@/lib/api';
 import type { MerchProduct } from '@/payload-types';
+import MerchProductCard from './MerchProductCard';
 import styles from './MerchContent.module.css';
 
 interface Props {
@@ -16,32 +17,11 @@ function getProductImageUrl(product: MerchProduct): string {
   return getMediaUrl(img);
 }
 
-function badgeClass(badge?: string) {
-  if (!badge) return '';
-  if (badge.toLowerCase().includes('new') || badge.toLowerCase().includes('digital')) return 'badge-teal';
-  if (badge.toLowerCase().includes('limited') || badge.toLowerCase().includes('save')) return 'badge-gold';
-  if (badge.toLowerCase().includes('exclusive')) return 'badge-amber';
-  return 'badge-gold';
-}
-
-function formatPrice(price: number, compareAt?: number | null, currency = 'USD') {
-  const symbol = currency === 'NGN' ? '₦' : '$';
-  const formatted = `${symbol}${price.toFixed(2)}`;
-  const was = compareAt ? `${symbol}${compareAt.toFixed(2)}` : '';
-  return { formatted, was };
-}
-
 export default function MerchContent({ products, categories }: Props) {
   const [activeFilter, setActiveFilter] = useState('All');
-  const [toast, setToast] = useState<string | null>(null);
 
   const filters = ['All', ...categories.filter(c => c !== 'All')];
   const filtered = activeFilter === 'All' ? products : products.filter(p => p.category === activeFilter);
-
-  const addToCart = useCallback((name: string, price: string) => {
-    setToast(`✓ ${name} (${price}) added to cart`);
-    setTimeout(() => setToast(null), 3000);
-  }, []);
 
   return (
     <>
@@ -89,9 +69,6 @@ export default function MerchContent({ products, categories }: Props) {
                 <div className="bundle-was">$120</div>
                 <div className="bundle-save">Save 30%</div>
               </div>
-              <button className="btn btn-gold" onClick={() => addToCart('The Complete Switch Bundle', '$85')}>
-                Add Bundle to Cart
-              </button>
             </div>
           </div>
 
@@ -99,44 +76,9 @@ export default function MerchContent({ products, categories }: Props) {
           <h2 className={`section-title ${styles.sectionTitleSpaced}`}>Shop the <em>Drop</em></h2>
 
           <div className="products-grid">
-            {filtered.map((p) => {
-              const { formatted, was } = formatPrice(p.price, p.compareAtPrice);
-              return (
-                <div key={p.id} className="product-card">
-                  <div
-                    className="product-img img-placeholder"
-                    style={{
-                      backgroundImage: getProductImageUrl(p) ? `url('${getProductImageUrl(p)}')` : undefined,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                      minHeight: 'inherit',
-                    }}
-                  >
-                    {p.badge && (
-                      <div className={`product-badge ${badgeClass(p.badge)}`}>{p.badge}</div>
-                    )}
-                  </div>
-                  <div className="product-body">
-                    <div className="product-name">{p.name}</div>
-                    <div className="product-variants">
-                      {p.variants?.map(v => v.options?.map(o => o.option).join(' / ') ?? '').join(' · ')}
-                    </div>
-                    <div className="product-footer">
-                      <div className="product-price">
-                        {formatted}{was && <span>{was}</span>}
-                      </div>
-                      <button
-                        className="add-btn"
-                        onClick={() => addToCart(p.name, formatted)}
-                        disabled={!p.inStock}
-                      >
-                        {p.inStock ? 'Add to Cart' : 'Sold Out'}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            {filtered.map((p) => (
+              <MerchProductCard key={p.id} product={p} />
+            ))}
           </div>
 
           <div className="shipping-strip">
@@ -163,11 +105,6 @@ export default function MerchContent({ products, categories }: Props) {
           </div>
         </div>
       </section>
-
-      <div className={`cart-toast${toast ? ' show' : ''}`}>
-        <div className="toast-dot" />
-        <span>{toast}</span>
-      </div>
     </>
   );
 }

@@ -1,12 +1,16 @@
 import AnnounceBar from '../_components/AnnounceBar';
-import Nav from '../_components/Nav';
+import CartDrawer from '../_components/CartDrawer';
 import Footer from '../_components/Footer';
-import { getSiteSettings, getNavigation, getArtistProfile } from '@/lib/api';
+import Nav from '../_components/Nav';
+import Providers from '../_components/Providers';
+import { getArtistProfile, getNavigation } from '@/lib/api';
+import { detectInitialCurrency } from '@/lib/currency-detect';
 
 export default async function MainLayout({ children }: { children: React.ReactNode }) {
-  const [navData, artist] = await Promise.all([
+  const [navData, artist, initialCurrency] = await Promise.all([
     getNavigation().catch(() => null),
     getArtistProfile().catch(() => null),
+    detectInitialCurrency(),
   ]);
 
   const navItems = navData?.navItems ?? [
@@ -21,7 +25,7 @@ export default async function MainLayout({ children }: { children: React.ReactNo
   ];
 
   return (
-    <>
+    <Providers initialCurrency={initialCurrency}>
       <header className="site-header">
         <AnnounceBar />
         <Nav items={navItems} linktreeUrl={artist?.socialLinks?.linktree} />
@@ -31,6 +35,7 @@ export default async function MainLayout({ children }: { children: React.ReactNo
         socialLinks={artist?.socialLinks}
         footerText={undefined}
       />
-    </>
+      <CartDrawer />
+    </Providers>
   );
 }
