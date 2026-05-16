@@ -8,21 +8,35 @@ async function seed() {
   console.log('Seeding database...')
 
   try {
-    // Create first admin user
+    // Create first admin user (skip if already exists)
     console.log('Creating admin user...')
-    await payload.create({
+    const existingUsers = await payload.find({
       collection: 'users',
-      data: {
-        email: 'admin@poshbugati.com',
-        password: 'password123',
-        name: 'Admin',
-        role: 'admin',
-      },
+      where: { email: { equals: 'admin@poshbugati.com' } },
+      overrideAccess: true,
     })
+    if (existingUsers.totalDocs === 0) {
+      await payload.create({
+        collection: 'users',
+        data: {
+          email: 'admin@poshbugati.com',
+          password: 'password123',
+          name: 'Admin',
+          role: 'admin',
+        },
+      })
+    } else {
+      console.log('Admin user already exists, skipping.')
+    }
 
-    // Artist Profile
+    // Artist Profile (skip if already exists)
     console.log('Creating artist profile...')
-    await payload.create({
+    const existingProfile = await payload.find({
+      collection: 'artist-profile',
+      overrideAccess: true,
+      limit: 1,
+    })
+    if (existingProfile.totalDocs === 0) await payload.create({
       collection: 'artist-profile',
       data: {
         name: 'Poshbugati',
@@ -88,9 +102,16 @@ async function seed() {
       },
     })
 
-    // Release - The Switch EP
+    // Release - The Switch EP (skip if already exists)
     console.log('Creating release...')
-    const release = await payload.create({
+    const existingRelease = await payload.find({
+      collection: 'releases',
+      where: { title: { equals: 'The Switch' } },
+      overrideAccess: true,
+      limit: 1,
+    })
+    let release = existingRelease.docs[0]
+    if (!release) release = await payload.create({
       collection: 'releases',
       data: {
         title: 'The Switch',
@@ -149,28 +170,29 @@ async function seed() {
           {
             label: 'MP3 Download',
             description: 'High quality MP3 files',
-            price: 9.99,
-            currency: 'USD',
+            priceUSD: 9.99,
+            priceNGN: 14999,
           },
           {
             label: 'WAV Download',
             description: 'Lossless WAV files',
-            price: 14.99,
-            currency: 'USD',
+            priceUSD: 14.99,
+            priceNGN: 22999,
           },
           {
             label: 'Complete Bundle',
             description: 'MP3 + WAV + Bonus Tracks',
-            price: 19.99,
-            currency: 'USD',
+            priceUSD: 19.99,
+            priceNGN: 29999,
           },
         ],
       },
     })
 
-    // Tour Shows
+    // Tour Shows (skip if already seeded)
     console.log('Creating tour shows...')
-    const shows = [
+    const existingShows = await payload.find({ collection: 'tour-shows', overrideAccess: true, limit: 1 })
+    const shows = existingShows.totalDocs > 0 ? [] : [
       { venue: 'The Grand Ole Opry', city: 'Nashville', country: 'USA', date: '2025-06-15', time: '8:00 PM', type: 'Headline' },
       { venue: 'Afro Nation', city: 'Lagos', country: 'Nigeria', date: '2025-07-20', time: '9:00 PM', type: 'Festival' },
       { venue: 'The Troubadour', city: 'Los Angeles', country: 'USA', date: '2025-08-10', time: '7:30 PM', type: 'Headline' },
@@ -182,14 +204,13 @@ async function seed() {
     ]
 
     for (const show of shows) {
-      await payload.create({
-        collection: 'tour-shows',
-        data: show,
-      })
+      await payload.create({ collection: 'tour-shows', data: show })
     }
+    if (existingShows.totalDocs > 0) console.log('Tour shows already exist, skipping.')
 
-    // Blog Posts
+    // Blog Posts (skip if already seeded)
     console.log('Creating blog posts...')
+    const existingPosts = await payload.find({ collection: 'blog-posts', overrideAccess: true, limit: 1 })
     const posts = [
       {
         title: 'Announcing The Switch EP',
@@ -305,16 +326,18 @@ async function seed() {
       },
     ]
 
-    for (const post of posts) {
-      await payload.create({
-        collection: 'blog-posts',
-        data: post,
-      })
+    if (existingPosts.totalDocs === 0) {
+      for (const post of posts) {
+        await payload.create({ collection: 'blog-posts', data: post })
+      }
+    } else {
+      console.log('Blog posts already exist, skipping.')
     }
 
-    // Podcast Episodes
+    // Podcast Episodes (skip if already seeded)
     console.log('Creating podcast episodes...')
-    const episodes = [
+    const existingEpisodes = await payload.find({ collection: 'podcast-episodes', overrideAccess: true, limit: 1 })
+    const episodes = existingEpisodes.totalDocs > 0 ? [] : [
       { episodeNumber: 7, title: 'Finding the Afro Country Sound', publishDate: '2025-01-15', duration: '45:30', tags: ['music', 'genre', 'creativity'] },
       { episodeNumber: 8, title: 'Collaborating Across Cultures', publishDate: '2025-02-01', duration: '52:15', tags: ['collaboration', 'culture'] },
       { episodeNumber: 9, title: 'The Business of Independent Music', publishDate: '2025-02-15', duration: '48:00', tags: ['business', 'independent'] },
@@ -362,35 +385,42 @@ async function seed() {
         },
       })
     }
+    if (existingEpisodes.totalDocs > 0) console.log('Podcast episodes already exist, skipping.')
 
-    // Podcast Stats
+    // Podcast Stats (skip if already seeded)
     console.log('Creating podcast stats...')
-    await payload.create({
-      collection: 'podcast-stats',
-      data: {
-        totalEpisodes: 12,
-        totalListeners: 50000,
-        averageRating: 4.8,
-        description: 'Between Two Sounds is a podcast exploring the intersection of music, culture, and creativity.',
-      },
-    })
-
-    // Merch Products
-    console.log('Creating merch products...')
-    const merchProducts = [
-      { name: 'The Switch EP Tee', category: 'Apparel', price: 35, inStock: true, badge: 'New' },
-      { name: 'Afro Country Hat', category: 'Apparel', price: 25, inStock: true },
-      { name: 'The Switch EP (Digital)', category: 'Music', price: 9.99, inStock: true },
-      { name: 'The Switch EP (WAV)', category: 'Music', price: 14.99, inStock: true },
-      { name: 'Poshbugati Sticker Pack', category: 'Accessory', price: 5, inStock: true },
-      { name: 'Complete Bundle', category: 'Bundle', price: 120, inStock: true, badge: 'Limited Edition', featured: true },
-    ]
-
-    for (const product of merchProducts) {
+    const existingStats = await payload.find({ collection: 'podcast-stats', overrideAccess: true, limit: 1 })
+    if (existingStats.totalDocs === 0) {
       await payload.create({
-        collection: 'merch-products',
-        data: product,
+        collection: 'podcast-stats',
+        data: {
+          totalEpisodes: 12,
+          totalListeners: 50000,
+          averageRating: 4.8,
+          description: 'Between Two Sounds is a podcast exploring the intersection of music, culture, and creativity.',
+        },
       })
+    } else {
+      console.log('Podcast stats already exist, skipping.')
+    }
+
+    // Merch Products (skip if already seeded)
+    console.log('Creating merch products...')
+    const existingMerch = await payload.find({ collection: 'merch-products', overrideAccess: true, limit: 1 })
+    if (existingMerch.totalDocs === 0) {
+      const merchProducts = [
+        { name: 'The Switch EP Tee', slug: 'the-switch-ep-tee', category: 'Apparel', priceUSD: 35, priceNGN: 54999, inStock: true, badge: 'New' },
+        { name: 'Afro Country Hat', slug: 'afro-country-hat', category: 'Apparel', priceUSD: 25, priceNGN: 39999, inStock: true },
+        { name: 'The Switch EP (Digital)', slug: 'the-switch-ep-digital', category: 'Digital', priceUSD: 9.99, priceNGN: 14999, inStock: true },
+        { name: 'The Switch EP (WAV)', slug: 'the-switch-ep-wav', category: 'Digital', priceUSD: 14.99, priceNGN: 22999, inStock: true },
+        { name: 'Poshbugati Sticker Pack', slug: 'poshbugati-sticker-pack', category: 'Accessory', priceUSD: 5, priceNGN: 7999, inStock: true },
+        { name: 'Complete Bundle', slug: 'complete-bundle', category: 'Bundle', priceUSD: 120, priceNGN: 189999, inStock: true, badge: 'Limited Edition', featured: true },
+      ]
+      for (const product of merchProducts) {
+        await payload.create({ collection: 'merch-products', data: product })
+      }
+    } else {
+      console.log('Merch products already exist, skipping.')
     }
 
     console.log('Seeding complete!')

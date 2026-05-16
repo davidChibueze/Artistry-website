@@ -289,7 +289,7 @@ export interface Release {
   title: string;
   slug: string;
   type?: ('EP' | 'Album' | 'Single') | null;
-  coverImage: number | Media;
+  coverImage?: (number | null) | Media;
   releaseDate?: string | null;
   description?: string | null;
   featured?: boolean | null;
