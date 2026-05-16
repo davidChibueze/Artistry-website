@@ -1513,6 +1513,9 @@ export interface SiteSetting {
     startDate?: string | null;
     endDate?: string | null;
   };
+  /**
+   * The release shown in the "Latest Release" section on /music. Leave empty to auto-select the first featured release, or the most recent release.
+   */
   heroRelease?: (number | null) | Release;
   epReleaseDate?: string | null;
   cdnUrl?: string | null;
