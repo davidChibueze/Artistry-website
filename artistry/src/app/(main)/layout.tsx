@@ -3,6 +3,7 @@ import CartDrawer from '../_components/CartDrawer';
 import Footer from '../_components/Footer';
 import Nav from '../_components/Nav';
 import Providers from '../_components/Providers';
+import ScrollRevealInit from '../_components/ScrollRevealInit';
 import { getArtistProfile, getNavigation } from '@/lib/api';
 import { detectInitialCurrency } from '@/lib/currency-detect';
 
@@ -46,6 +47,7 @@ export default async function MainLayout({ children }: { children: React.ReactNo
         navItems={allNavItems}
       />
       <CartDrawer />
+      <ScrollRevealInit />
     </Providers>
   );
 }

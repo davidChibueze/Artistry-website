@@ -10,9 +10,9 @@ export const metadata: Metadata = {
 
 export default async function MediaPage() {
   const [photosRes, videosRes, pressRes] = await Promise.all([
-    getMediaGallery({ type: 'Photo' }).catch(() => ({ docs: [], totalDocs: 0 })),
-    getMediaGallery({ type: 'Video' }).catch(() => ({ docs: [], totalDocs: 0 })),
-    getMediaGallery({ type: 'Press Quote' }).catch(() => ({ docs: [], totalDocs: 0 })),
+    getMediaGallery({ type: 'Photo', limit: 12, page: 1 }).catch(() => ({ docs: [], totalDocs: 0, totalPages: 1, page: 1, hasNextPage: false, hasPrevPage: false })),
+    getMediaGallery({ type: 'Video', limit: 12, page: 1 }).catch(() => ({ docs: [], totalDocs: 0, totalPages: 1, page: 1, hasNextPage: false, hasPrevPage: false })),
+    getMediaGallery({ type: 'Press Quote', limit: 50 }).catch(() => ({ docs: [], totalDocs: 0 })),
   ]);
 
   return (
@@ -24,7 +24,13 @@ export default async function MediaPage() {
           <p className="page-sub">Photos, videos, press coverage, and downloadable assets for journalists, bloggers, and content creators. All materials cleared for editorial use.</p>
         </div>
       </div>
-      <MediaContent photos={photosRes.docs} videos={videosRes.docs} pressQuotes={pressRes.docs} />
+      <MediaContent
+        photos={photosRes.docs}
+        photosMeta={{ totalPages: (photosRes as { totalPages?: number }).totalPages ?? 1, totalDocs: photosRes.totalDocs, page: (photosRes as { page?: number }).page ?? 1 }}
+        videos={videosRes.docs}
+        videosMeta={{ totalPages: (videosRes as { totalPages?: number }).totalPages ?? 1, totalDocs: videosRes.totalDocs, page: (videosRes as { page?: number }).page ?? 1 }}
+        pressQuotes={pressRes.docs}
+      />
     </>
   );
 }

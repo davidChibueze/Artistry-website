@@ -209,12 +209,14 @@ export async function getMerchProductBySlug(slug: string, revalidate = 300) {
 // ── Media Gallery ──
 
 export async function getMediaGallery(
-  filters?: { type?: string },
+  filters?: { type?: string; page?: number; limit?: number },
   revalidate = 3600
 ) {
   const params: Record<string, string | number | boolean | undefined> = {
     sort: 'order',
     depth: 2,
+    limit: filters?.limit ?? 12,
+    page: filters?.page ?? 1,
   }
   if (filters?.type) params['where[type][equals]'] = filters.type
   return fetchAPI<PayloadResponse<MediaGallery>>(
