@@ -243,9 +243,9 @@ export async function getMedia(
 
 // ── Globals ──
 
-export async function getSiteSettings(revalidate = 3600) {
+export async function getSiteSettings() {
   return fetchAPI<SiteSetting>('/globals/site-settings', {
-    next: { revalidate },
+    cache: 'no-store',
   })
 }
 
