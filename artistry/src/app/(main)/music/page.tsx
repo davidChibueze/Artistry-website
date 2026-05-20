@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import MusicPlayer from '../../_components/MusicPlayer';
 import ReleaseDescription from '../../_components/ReleaseDescription';
-import { getReleases, getSiteSettings, getMediaUrl } from '@/lib/api';
+import { getReleases, getSiteSettings, getArtistProfile, getMediaUrl } from '@/lib/api';
 import { detectInitialCurrency } from '@/lib/currency-detect';
 import { formatMoney, priceFor } from '@/lib/money';
 import styles from './page.module.css';
@@ -20,9 +20,10 @@ function formatDate(dateStr?: string | null) {
 }
 
 export default async function MusicPage() {
-  const [releasesRes, settings] = await Promise.all([
+  const [releasesRes, settings, artist] = await Promise.all([
     getReleases().catch(() => ({ docs: [], totalDocs: 0 })),
     getSiteSettings().catch(() => null),
+    getArtistProfile().catch(() => null),
   ]);
   const currency = await detectInitialCurrency();
   const releases = releasesRes.docs;
@@ -160,9 +161,18 @@ export default async function MusicPage() {
             <div className="section-label">Stream & Save</div>
             <h3 className={`section-title ${styles.platformsTitle}`}>Find the <em>music</em> everywhere</h3>
             <div className="platform-grid">
-              <Link className="platform-btn" href="/subscribe"><div className="p-dot" style={{ background: '#1DB954' }} />Spotify</Link>
-              <Link className="platform-btn" href="/subscribe"><div className="p-dot" style={{ background: '#FC3C44' }} />Apple Music</Link>
-              <Link className="platform-btn" href="/subscribe"><div className="p-dot" style={{ background: '#FF0000' }} />YouTube Music</Link>
+              {artist?.socialLinks?.spotify
+                ? <a className="platform-btn" href={artist.socialLinks.spotify} target="_blank" rel="noopener noreferrer"><div className="p-dot" style={{ background: '#1DB954' }} />Spotify</a>
+                : <Link className="platform-btn" href="https://open.spotify.com/artist/4pXLT4UxQjOnIF2i9ShM3J"><div className="p-dot" style={{ background: '#1DB954' }} />Spotify</Link>
+              }
+              {artist?.socialLinks?.appleMusic
+                ? <a className="platform-btn" href={artist.socialLinks.appleMusic} target="_blank" rel="noopener noreferrer"><div className="p-dot" style={{ background: '#FC3C44' }} />Apple Music</a>
+                : <Link className="platform-btn" href="https://music.apple.com/us/artist/poshbugati/1584769972"><div className="p-dot" style={{ background: '#FC3C44' }} />Apple Music</Link>
+              }
+              {artist?.socialLinks?.youtube
+                ? <a className="platform-btn" href={artist.socialLinks.youtube} target="_blank" rel="noopener noreferrer"><div className="p-dot" style={{ background: '#FF0000' }} />YouTube Music</a>
+                : <Link className="platform-btn" href="https://www.youtube.com/channel/UC995IfxE4P9cJ6DXvlFQWtA"><div className="p-dot" style={{ background: '#FF0000' }} />YouTube Music</Link>
+              }
               <Link href="/subscribe" className={`platform-btn ${styles.exclusivePlatform}`}><div className="p-dot" style={{ background: 'var(--gold)' }} />poshbugati.com</Link>
             </div>
           </div>

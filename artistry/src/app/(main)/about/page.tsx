@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Globe, Music2, RefreshCw } from 'lucide-react';
 import { getArtistProfile, getMediaUrl } from '@/lib/api';
+import RichText from '../../_components/RichText';
 import styles from './page.module.css';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -73,11 +74,13 @@ export default async function AboutPage() {
             <div className="bio-text">
               <div className={`section-label ${artist?.aboutBackgroundImage ? '' : styles.warmLabel}`}>Full Story</div>
               <h2 className={`section-title ${artist?.aboutBackgroundImage ? '' : styles.warmTitle}`}>The <em className={artist?.aboutBackgroundImage ? '' : styles.amberEm}>journey</em></h2>
-              <p><strong>{artist?.name || 'Emmanuel George Akpose'}</strong>, better known as Poshbugati, was born in Jos, Plateau State, Nigeria — and has always remained true to his humble beginnings. Originally from Isoko South in Delta State, he was exposed to music at a young age while singing in the church choir. That was when he knew this path was carved out for him.</p>
-              <p>Now a Miami resident, Poshbugati draws inspiration from legends like Afrobeats pioneer <strong>Fela Kuti</strong>, <strong>Tupac</strong>, and <strong>Bob Marley</strong> — using the musicality of those before him to steer his propulsive Afro-pop sound into new territory.</p>
-              <p>With mammoth singles like <strong>&ldquo;AJE&rdquo;</strong> and the <strong>Influencer Whoop Remix</strong> — an Afro-Dancehall collaboration featuring Jamaican reggae star <strong>Gyptian</strong> — he continues to push boundaries. His Amapiano record <strong>&ldquo;Outsiders&rdquo;</strong> is a top-shelf feel-good vibe that further cements his range.</p>
-              <blockquote>&ldquo;With his flexible and multifaceted disposition, Poshbugati is no pushover — he still has in his kitty a collaboration with Bizzy Bone of the legendary Bone Thugs &lsquo;N&rsquo; Harmony.&rdquo;</blockquote>
-              <p>A talent oozing of innate instinct for marking steps in the sands of musical timing — Poshbugati is only just getting started.</p>
+              {artist?.bio
+                ? <RichText content={artist.bio as Parameters<typeof RichText>[0]['content']} className={styles.richBio} />
+                : <>
+                    <p>Poshbugati grew up listening to country melodies but found his heartbeat in Afrobeat. Born in Jos, Nigeria and now a Florida resident, he blends Nigerian rhythms with American country soul to forge a bold new path: Afro Country. From sunlit guitar licks to infectious Afrobeat grooves, this American-Nigerian artist weaves traditions into one electrifying soundscape. From Lagos nights to Miami days, follow Poshbugati as he redefines genre lines, one groove at a time.</p>
+                    <p>Rooted in Nigerian heritage, shaped by American country soul, Afro Country celebrates unity through music.</p>
+                  </>
+              }
             </div>
             <div>
               <div className="timeline">
