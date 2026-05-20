@@ -27,6 +27,7 @@ interface PayloadResponse<T> {
   nextPage: number | null
 }
 
+// todo-- remove cache for important things
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api'
 const API_ORIGIN = API_URL.replace(/\/api\/?$/, '')
 
