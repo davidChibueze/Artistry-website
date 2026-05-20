@@ -179,7 +179,7 @@ export default function CheckoutClient() {
       <div className={styles.empty}>
         <h2>Your cart is empty.</h2>
         <p>Add something to checkout.</p>
-        <a className="btn btn-gold" href="/merch">Browse merch</a>
+        <a className="btn btn-gold" href="/shop">Browse shop</a>
       </div>
     )
   }

@@ -122,7 +122,7 @@ export default function OrderView({ order }: Props) {
       </div>
 
       <div style={{ textAlign: 'center', marginTop: 24 }}>
-        <Link href="/merch" className="btn btn-outline">Keep shopping</Link>
+        <Link href="/shop" className="btn btn-outline">Keep shopping</Link>
       </div>
     </div>
   )

@@ -122,7 +122,7 @@ export default function SubscribePageClient({ epReleaseDate }: Props) {
             <p>Welcome to the inner circle. Check your inbox — early access details for The Switch are on their way.</p>
             <div className={styles.successActions}>
               <Link href="/music" className="btn btn-outline btn-sm">Preview Tracks</Link>
-              <Link href="/merch" className="btn btn-gold btn-sm">Browse Merch</Link>
+              <Link href="/shop" className="btn btn-gold btn-sm">Browse Shop</Link>
             </div>
           </div>
         )}

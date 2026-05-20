@@ -48,7 +48,7 @@ export default function Footer({ socialLinks, footerText }: Props) {
         <div className="footer-col">
           <h4>Connect</h4>
           <ul>
-            <li><Link href="/merch">Merch</Link></li>
+            <li><Link href="/shop">Shop</Link></li>
             <li><Link href="/media">Press Kit</Link></li>
             <li><Link href="/contact">Booking</Link></li>
             <li><Link href="/subscribe">Newsletter</Link></li>

@@ -20,7 +20,7 @@ export default async function MainLayout({ children }: { children: React.ReactNo
     { label: 'Tour', url: '/tour', external: false, cta: false, locations: ['header'] },
     { label: 'Podcast', url: '/podcast', external: false, cta: false, locations: ['header'] },
     { label: 'Journal', url: '/blog', external: false, cta: false, locations: ['header'] },
-    { label: 'Merch', url: '/merch', external: false, cta: true, locations: ['header'] },
+    { label: 'Shop', url: '/shop', external: false, cta: true, locations: ['header'] },
     { label: 'Media', url: '/media', external: false, cta: false, locations: ['header'] },
     { label: 'Booking', url: '/contact', external: false, cta: false, locations: ['header'] },
   ];

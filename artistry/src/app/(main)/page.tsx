@@ -162,9 +162,9 @@ export default async function HomePage() {
             <div className={styles.sectionHeaderRow}>
               <div>
                 <div className="section-label">Official Store</div>
-                <h2 className="section-title">Featured <em>Merch</em></h2>
+                <h2 className="section-title">Featured <em>Shop</em></h2>
               </div>
-              <Link href="/merch" className="btn btn-outline btn-sm">All Merch →</Link>
+              <Link href="/shop" className="btn btn-outline btn-sm">All Shop →</Link>
             </div>
             <MarqueeCarousel itemWidth={320} gap={28} duration={50}>
               {merchProducts.filter(m => m.featured).map((product) => (

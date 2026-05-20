@@ -30,7 +30,7 @@ export default async function AccountOrdersPage() {
           </p>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link href="/orders/lookup" className="btn btn-outline">Find an order</Link>
-            <Link href="/merch" className="btn btn-gold">Browse merch</Link>
+            <Link href="/shop" className="btn btn-gold">Browse shop</Link>
           </div>
         </div>
       </>
