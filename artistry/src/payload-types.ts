@@ -1517,6 +1517,8 @@ export interface SiteSetting {
   epReleaseDate?: string | null;
   cdnUrl?: string | null;
   footerText?: string | null;
+  featuredVideoId?: string | null;
+  featuredVideoTitle?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }

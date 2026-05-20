@@ -1520,6 +1520,14 @@ export interface SiteSetting {
   epReleaseDate?: string | null;
   cdnUrl?: string | null;
   footerText?: string | null;
+  /**
+   * YouTube video ID (the part after ?v= in the URL). Example: VBStMoVYZS4
+   */
+  featuredVideoId?: string | null;
+  /**
+   * Display title shown below the video embed on the homepage.
+   */
+  featuredVideoTitle?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1574,6 +1582,8 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   epReleaseDate?: T;
   cdnUrl?: T;
   footerText?: T;
+  featuredVideoId?: T;
+  featuredVideoTitle?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

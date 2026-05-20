@@ -73,5 +73,19 @@ export const SiteSettings: GlobalConfig = {
       name: 'footerText',
       type: 'text',
     },
+    {
+      name: 'featuredVideoId',
+      type: 'text',
+      admin: {
+        description: 'YouTube video ID (the part after ?v= in the URL). Example: VBStMoVYZS4',
+      },
+    },
+    {
+      name: 'featuredVideoTitle',
+      type: 'text',
+      admin: {
+        description: 'Display title shown below the video embed on the homepage.',
+      },
+    },
   ],
 }

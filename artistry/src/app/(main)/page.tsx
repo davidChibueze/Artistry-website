@@ -5,6 +5,7 @@ import HomeSubscribeForm from '../_components/HomeSubscribeForm';
 import HeroSocials from '../_components/HeroSocials';
 import MarqueeCarousel from '../_components/MarqueeCarousel';
 import MerchProductCard from '../_components/MerchProductCard';
+import FeaturedVideo from '../_components/FeaturedVideo';
 import { getArtistProfile, getReleases, getTourShows, getBlogPosts, getSiteSettings, getMerchProducts, getMediaUrl } from '@/lib/api';
 import styles from './page.module.css';
 
@@ -141,6 +142,19 @@ export default async function HomePage() {
           <cite>— {artist?.name || 'Poshbugati'}</cite>
         </blockquote>
       </div>
+
+      {settings?.featuredVideoId && (
+        <section className="section-pad">
+          <div className="section-wrap">
+            <div className="section-label">Watch</div>
+            <h2 className="section-title">Featured <em>Video</em></h2>
+            <FeaturedVideo
+              videoId={settings.featuredVideoId}
+              title={settings.featuredVideoTitle ?? 'Featured Video'}
+            />
+          </div>
+        </section>
+      )}
 
       {merchProducts.length > 0 && (
         <section className="section-pad">
