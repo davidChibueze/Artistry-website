@@ -72,9 +72,9 @@ async function fetchAPI<T>(path: string, init?: RequestInit): Promise<T> {
 
 // ── Artist Profile ──
 
-export async function getArtistProfile(revalidate = 3600) {
+export async function getArtistProfile() {
   const res = await fetchAPI<PayloadResponse<ArtistProfile>>('/artist-profile', {
-    next: { revalidate },
+    cache: 'no-store',
   })
   return res.docs[0] ?? null
 }
