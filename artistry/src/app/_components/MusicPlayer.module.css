@@ -77,24 +77,106 @@
   margin-right: auto;
 }
 
-/* Mobile: collapse action buttons to icons only */
-@media (max-width: 620px) {
+/* getBtnShort is mobile-only; hide it on desktop */
+.getBtnShort { display: none; }
+
+/* Mobile: play button replaces track number, GET button is compact */
+@media (max-width: 768px) {
+  /*
+   * Strategy: display:contents on trackActions dissolves the wrapper so
+   * previewBtn and getBtn become direct grid children. Then order:-1 on
+   * previewBtn snaps it into column 1 (the old t-num slot).
+   *
+   * Visible grid items after hiding t-num, t-badge:
+   *   t-info(order:0)  t-dur(order:0)  previewBtn(order:-1)  getBtn(order:0)
+   *
+   * Sorted by order, then DOM position:
+   *   previewBtn | t-info | t-dur | getBtn
+   *   44px       | 1fr    | auto  | auto
+   */
   .tracklist :global(.track) {
-    grid-template-columns: 40px 1fr auto;
+    grid-template-columns: 44px 1fr auto auto;
+    gap: 0 10px;
+    padding: 14px 16px;
+    align-items: center;
   }
 
-  /* t-badge and t-dur hide on very small screens — handled by outer grid collapse */
-  .trackActions {
-    gap: 6px;
-  }
-
-  .previewBtnLabel,
-  .getBtnLabel {
+  /* Remove track number — play button fills this slot */
+  .tracklist :global(.t-num) {
     display: none;
   }
 
-  .previewBtn,
+  /* Hide the badge and the empty placeholder span that replaces it when
+     there is no badge — without this, tracks with no badge get an extra
+     grid column that shifts duration and GET out of alignment */
+  .tracklist :global(.t-badge),
+  .tracklist :global(.track > span:not(.t-badge)) {
+    display: none;
+  }
+
+  /* Duration: keep visible, slightly smaller */
+  .tracklist :global(.t-dur) {
+    font-size: 11px;
+    letter-spacing: 0;
+  }
+
+  /* Dissolve wrapper — previewBtn and getBtn become direct grid items */
+  .trackActions {
+    display: contents;
+  }
+
+  /* Play button → column 1 (replaces track number) */
+  .previewBtn {
+    order: -1;
+    min-width: 36px;
+    min-height: 36px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    border: none;
+    background: transparent;
+    border-radius: 0;
+  }
+
+  /* Hide "30s" / "Preview" label — icon only */
+  .previewBtnLabel {
+    display: none;
+  }
+
+  /* GET button → trailing link style, no vertical padding, no wrap */
   .getBtn {
-    padding: 6px 8px;
+    padding: 0;
+    min-width: 0;
+    min-height: 0;
+    background: transparent;
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border-radius: 0;
+  }
+
+  .getBtn:hover {
+    background: transparent;
+    color: var(--amber);
+  }
+
+  /* Show short label on mobile, hide full label */
+  .getBtnLabel { display: none; }
+  .getBtnShort { display: inline; }
+
+  /* EP actions bar below tracklist */
+  .epActions {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .epActionsLabel {
+    width: 100%;
+    margin-right: 0;
   }
 }

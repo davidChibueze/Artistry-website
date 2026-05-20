@@ -139,6 +139,7 @@ export default function MusicPlayer({
                   aria-label={`Get ${t.name} — download or stream`}
                 >
                   <span className={styles.getBtnLabel}>Get Track</span>
+                  <span className={styles.getBtnShort} aria-hidden="true">Get</span>
                 </button>
               </div>
             </div>
