@@ -137,6 +137,21 @@ export const ArtistProfile: CollectionConfig = {
             placeholder: 'https://linktr.ee/poshbugati',
           },
         },
+        {
+          name: 'appleMusic',
+          label: 'Apple Music',
+          type: 'text',
+        },
+        {
+          name: 'twitter',
+          label: 'Twitter / X',
+          type: 'text',
+        },
+        {
+          name: 'spotify',
+          label: 'Spotify',
+          type: 'text',
+        },
       ],
     },
     {

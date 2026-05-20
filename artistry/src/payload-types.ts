@@ -231,6 +231,9 @@ export interface ArtistProfile {
      * Artist-wide stream landing page — used by the "Find the music everywhere" button on the music page. Typically a Linktree, Songwhip, or distributor aggregator.
      */
     streamUrl?: string | null;
+    appleMusic?: string | null;
+    twitter?: string | null;
+    spotify?: string | null;
   };
   contactEmails?: {
     general?: string | null;

@@ -57,6 +57,15 @@
 .link_linktree:hover {
   color: #43e660;
 }
+.link_appleMusic:hover {
+  color: #fc3c44;
+}
+.link_twitter:hover {
+  color: #ffffff;
+}
+.link_spotify:hover {
+  color: #1db954;
+}
 
 /* Instagram: gradient swap on the path fill (overrides currentColor). */
 .link_instagram:hover .icon path {
