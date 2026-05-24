@@ -15,10 +15,10 @@ const SOLO_SELECTORS = [
   '.ep-featured-title',
   '.ep-featured-desc',
   '.ep-featured-actions',
-  '.hero-eyebrow',
-  '.hero-actions',
   '.bio-block',
   '.pressEnquiryBlock',
+  '.stream-bar',
+  '.featured-video-wrap',
 ].join(',');
 
 // Container selectors — their direct children stagger in as a group
@@ -33,18 +33,36 @@ const GROUP_SELECTORS = [
   '.footer-grid',
 ].join(',');
 
-// Items that stagger within their own sibling context (not a named grid container)
+// Items that stagger within their own sibling context
+// NOTE: .feat-card and .merch-card are intentionally excluded here —
+// MarqueeCarousel duplicates the DOM set for infinite scroll, so observing
+// individual cards would double-fire and leave set-B permanently invisible.
 const SIBLING_SELECTORS = [
-  '.feat-card',
   '.release-card',
   '.tour-show',
-  '.merch-card',
+  '.news-item',
 ].join(',');
 
-const STAGGER_STEP = 80; // ms per child
+// Hero selectors animated on mount (they're in the initial viewport, so
+// IntersectionObserver fires immediately with no visual effect)
+const HERO_SEQUENCE = ['.hero-eyebrow', '.hero-h1', '.hero-actions'];
+
+const STAGGER_STEP = 100; // ms per child
 
 export default function ScrollRevealInit() {
   useEffect(() => {
+    // ── Hero: animate on mount with staggered setTimeout ─────────────
+    const heroEls = HERO_SEQUENCE.flatMap(sel =>
+      Array.from(document.querySelectorAll<HTMLElement>(sel))
+    );
+    heroEls.forEach(el => el.classList.add('sr'));
+    heroEls.forEach((el, i) => {
+      setTimeout(() => {
+        el.style.transitionDelay = '0s';
+        el.classList.add('sr-visible');
+      }, 120 + i * STAGGER_STEP);
+    });
+
     // ── Solo reveals ──────────────────────────────────────────────────
     const soloEls = document.querySelectorAll<HTMLElement>(SOLO_SELECTORS);
     soloEls.forEach(el => el.classList.add('sr'));
@@ -59,7 +77,7 @@ export default function ScrollRevealInit() {
           }
         });
       },
-      { threshold: 0.12, rootMargin: '0px 0px -48px 0px' }
+      { threshold: 0.1, rootMargin: '0px 0px -80px 0px' }
     );
     soloEls.forEach(el => soloObserver.observe(el));
 
@@ -74,18 +92,17 @@ export default function ScrollRevealInit() {
             children.forEach((child, i) => {
               child.classList.add('sr');
               child.style.transitionDelay = `${i * STAGGER_STEP}ms`;
-              // Small rAF so the browser registers the sr class before adding sr-visible
               requestAnimationFrame(() => requestAnimationFrame(() => child.classList.add('sr-visible')));
             });
             groupObserver.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.05, rootMargin: '0px 0px -32px 0px' }
+      { threshold: 0.05, rootMargin: '0px 0px -80px 0px' }
     );
     groupEls.forEach(el => groupObserver.observe(el));
 
-    // ── Sibling stagger (cards inside carousels / arbitrary containers) ─
+    // ── Sibling stagger (cards in arbitrary containers) ───────────────
     const siblingEls = document.querySelectorAll<HTMLElement>(SIBLING_SELECTORS);
     siblingEls.forEach(el => el.classList.add('sr'));
 
@@ -94,7 +111,6 @@ export default function ScrollRevealInit() {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             const el = entry.target as HTMLElement;
-            // Find sibling index inside its parent for stagger
             const siblings = el.parentElement ? Array.from(el.parentElement.children) : [];
             const idx = siblings.indexOf(el);
             el.style.transitionDelay = `${Math.min(idx, 5) * STAGGER_STEP}ms`;
@@ -103,7 +119,7 @@ export default function ScrollRevealInit() {
           }
         });
       },
-      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+      { threshold: 0.1, rootMargin: '0px 0px -80px 0px' }
     );
     siblingEls.forEach(el => siblingObserver.observe(el));
 
